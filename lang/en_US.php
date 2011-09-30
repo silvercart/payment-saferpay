@@ -31,3 +31,10 @@ global $lang;
 
 
 
+
+
+
+$lang['en_US']['SilvercartPaymentSaferpay']['API_ACCOUNTID']            = 'Account ID';
+$lang['en_US']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']     = 'API development mode';
+$lang['en_US']['SilvercartPaymentSaferpay']['API_LIVE_MODE']            = 'API live mode';
+$lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']      = 'Payinit gateway URL';

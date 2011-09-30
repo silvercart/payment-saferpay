@@ -33,3 +33,8 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
 } else {
     $lang['de_DE'] = $lang['en_US'];
 }
+
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_ACCOUNTID']            = 'Account ID';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']     = 'API Entwicklungsmodus';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_LIVE_MODE']            = 'API Live Modus';
+$lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']      = 'Payinit Gateway URL';

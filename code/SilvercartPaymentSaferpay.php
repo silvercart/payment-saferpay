@@ -32,7 +32,7 @@
  * @copyright 2011 pixeltricks GmbH
  */
 class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
-    
+
     /**
      * contains module name for display in the admin backend
      *
@@ -42,7 +42,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 30.09.2011
      */
     protected $moduleName = 'Saferpay';
-    
+
     /**
      * Indicates whether a payment module has multiple payment channels or not.
      *
@@ -52,7 +52,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 30.09.2011
      */
     public static $has_multiple_payment_channels = false;
-    
+
     /**
      * A list of possible payment channels.
      *
@@ -62,11 +62,90 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 30.09.2011
      */
     public static $possible_payment_channels = array();
-    
+
+    /**
+     * Attributes.
+     *
+     * @var array
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 30.09.2011
+     */
+    public static $db = array(
+        'saferpayAccountId_Dev'     => 'VarChar(100)',
+        'saferpayAccountId_Live'    => 'VarChar(100)',
+        'saferpayPayinitGateway'    => 'VarChar(100)'
+    );
+
+    /**
+     * Default records.
+     *
+     * @var array
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 30.09.2011
+     */
+    public static $default_records = array(
+        'saferpayPayinitGateway'    => 'https://www.saferpay.com/hosting/CreatePayInit.asp'
+    );
+
+    /**
+     * returns CMS fields
+     *
+     * @param mixed $params optional
+     *
+     * @return FieldSet
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 30.09.2011
+     */
+    public function getCMSFields($params = null) {
+        $fields         = parent::getCMSFieldsForModules($params);
+        $fieldLabels    = self::$field_labels;
+
+        $tabApi     = new Tab('SaferpayAPI');
+        $tabUrls    = new Tab('SaferpayURLs');
+
+        $fields->fieldByName('Sections')->push($tabApi);
+        $fields->fieldByName('Sections')->push($tabUrls);
+
+        // API Tabset ---------------------------------------------------------
+        $tabApiTabset   = new TabSet('APIOptions');
+        $tabApiTabDev   = new Tab(_t('SilvercartPaymentSaferpay.API_DEVELOPMENT_MODE', 'API development mode'));
+        $tabApiTabLive  = new Tab(_t('SilvercartPaymentSaferpay.API_LIVE_MODE', 'API live mode'));
+
+        // API Tabs -----------------------------------------------------------
+        $tabApiTabset->push($tabApiTabDev);
+        $tabApiTabset->push($tabApiTabLive);
+
+        $tabApi->push($tabApiTabset);
+
+        // API Tab Dev fields -------------------------------------------------
+        $tabApiTabDev->setChildren(
+            new FieldSet(
+                new TextField('saferpayAccountId_Dev', _t('SilvercartPaymentSaferpay.API_ACCOUNTID'))
+            )
+        );
+
+        // API Tab Live fields ------------------------------------------------
+        $tabApiTabLive->setChildren(
+            new FieldSet(
+                new TextField('saferpayAccountId_Live', _t('SilvercartPaymentSaferpay.API_ACCOUNTID'))
+            )
+        );
+
+        // URL fields ------------------------------------------------
+        $tabUrls->push(
+            new TextField('saferpayPayinitGateway', _t('SilvercartPaymentSaferpay.URL_PAYINIT_GATEWAY'))
+        );
+
+        return $fields;
+    }
+
     // ------------------------------------------------------------------------
     // processing methods
     // ------------------------------------------------------------------------
-    
+
     /**
      * hook to be called before order creation
      *
@@ -78,8 +157,11 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 30.09.2011
      */
     public function processPaymentBeforeOrder() {
+        $paymentUrl = $this->getPaymentUrl();
+        print $paymentUrl."<br />";
+        exit();
     }
-    
+
     /**
      * hook to be called after jumpback from payment provider; called before
      * order creation
@@ -91,7 +173,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     public function processReturnJumpFromPaymentProvider() {
     }
-    
+
     /**
      * hook to be called after order creation
      *
@@ -104,110 +186,75 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     public function processPaymentAfterOrder($orderObj = array()) {
     }
-    
-    // ------------------------------------------------------------------------
-    // payment module specific methods
-    // ------------------------------------------------------------------------
-    
+
     /**
-     * returns CMS fields
+     * possibility to return a text at the end of the order process
+     * processed after order creation
      *
-     * @param mixed $params optional
-     *
-     * @return FieldSet
+     * @param Order $orderObj the order object
+     * 
+     * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 30.09.2011
      */
-    public function getCMSFields($params = null) {
-        $fields = parent::getCMSFieldsForModules($params);
-        $fieldLabels = self::$field_labels;
+    public function processPaymentConfirmationText($orderObj) {
+    }
 
-        $tabApi = new Tab('SaferPayAPI');
-        $tabUrls = new Tab('SaferPayURLs');
-        $tabOrderStatus = new Tab('OrderStatus', _t('SilvercartPaymentSaferpay.ATTRIBUTED_ORDERSTATUS', 'attributed order status', null, 'Zuordnung Bestellstatus'));
+    // ------------------------------------------------------------------------
+    // payment module specific methods
+    // ------------------------------------------------------------------------
 
-        $fields->fieldByName('Sections')->push($tabApi);
-        $fields->fieldByName('Sections')->push($tabUrls);
-        $fields->fieldByName('Sections')->push($tabOrderStatus);
+    protected function getPaymentUrl() {
+        $paymentUrl = '';
+        $amount = $this->getShoppingCart()->getAmount();
+        
+        $successlink    = $this->getReturnLink();
+        $faillink       = $this->getCancelLink();
+        $backlink       = $this->getReturnLink();
+        
+        // Mandatory attributes
+        $attributes  = "?ACCOUNTID=" . $accountid;
+        $attributes .= "&AMOUNT=" . $amount;
+        $attributes .= "&CURRENCY=" . $currency;
+        $attributes .= "&DESCRIPTION=" . urlencode($description);
+        $attributes .= "&SUCCESSLINK=" . urlencode($successlink);
+        $attributes .= "&FAILLINK=" . urlencode($faillink);
+        $attributes .= "&BACKLINK=" . urlencode($backlink);
+        
+        // Additional attributes
+        $attributes .= "&CCCVC=yes"; // input of cardsecuritynumber mandatory
+        $attributes .= "&CCNAME=yes"; // input of cardholder name mandatory
 
-        // basic settings -------------------------------------------------
-        $fields->addFieldToTab(
-                'Sections.Basic',
-                new TextField('SaferPaySharedSecret', _t('SilvercartPaymentSaferpay.SHARED_SECRET'))
-        );
-
-        // API Tabset ---------------------------------------------------------
-        $tabApiTabset = new TabSet('APIOptions');
-        $tabApiTabDev = new Tab(_t('SilvercartPaymentSaferpay.API_DEVELOPMENT_MODE', 'API development mode', null, 'API Entwicklungsmodus'));
-        $tabApiTabLive = new Tab(_t('SilvercartPaymentSaferpay.API_LIVE_MODE', 'API live mode'));
-
-        // API Tabs -----------------------------------------------------------
-        $tabApiTabset->push($tabApiTabDev);
-        $tabApiTabset->push($tabApiTabLive);
-
-        $tabApi->push($tabApiTabset);
-
-        // URL Tabset ---------------------------------------------------------
-        $tabUrlTabset = new TabSet('URLOptions');
-        $tabUrlTabDev = new Tab(_t('SilvercartPaymentSaferpay.URLS_DEV_MODE', 'URLs of dev mode', null, 'URLs Entwicklungsmodus'));
-        $tabUrlTabLive = new Tab(_t('SilvercartPaymentSaferpay.URLS_LIVE_MODE', 'URLs of live mode', null, 'URLs Livemodus'));
-
-        // URL Tabs -----------------------------------------------------------
-        $tabUrlTabset->push($tabUrlTabDev);
-        $tabUrlTabset->push($tabUrlTabLive);
-
-        $tabUrls->push($tabUrlTabset);
-
-        // API Tab Dev fields -------------------------------------------------
-        $tabApiTabDev->setChildren(
-                new FieldSet(
-                        new TextField('SaferPayApiUsername_Dev', _t('SilvercartPaymentSaferpay.API_USERNAME')),
-                        new TextField('SaferPayApiPassword_Dev', _t('SilvercartPaymentSaferpay.API_PASSWORD')),
-                        new TextField('SaferPayApiSignature_Dev', _t('SilvercartPaymentSaferpay.API_SIGNATURE')),
-                        new TextField('SaferPayApiVersion_Dev', _t('SilvercartPaymentSaferpay.API_VERSION'))
-                )
-        );
-
-        // API Tab Live fields ------------------------------------------------
-        $tabApiTabLive->setChildren(
-                new FieldSet(
-                        new TextField('SaferPayApiUsername_Live', _t('SilvercartPaymentSaferpay.API_USERNAME')),
-                        new TextField('SaferPayApiPassword_Live', _t('SilvercartPaymentSaferpay.API_PASSWORD')),
-                        new TextField('SaferPayApiSignature_Live', _t('SilvercartPaymentSaferpay.API_SIGNATURE')),
-                        new TextField('SaferPayApiVersion_Live', _t('SilvercartPaymentSaferpay.API_VERSION'))
-                )
-        );
-
-        // URL Tab Dev fields -------------------------------------------------
-        $tabUrlTabDev->setChildren(
-                new FieldSet(
-                        new TextField('SaferPayCheckoutUrl_Dev', _t('SilvercartPaymentSaferpay.CHECKOUT_URL')),
-                        new TextField('SaferPayNvpApiServerUrl_Dev', _t('SilvercartPaymentSaferpay.URL_API_NVP')),
-                        new TextField('SaferPaySoapApiServerUrl_Dev', _t('SilvercartPaymentSaferpay.URL_API_SOAP'))
-                )
-        );
-
-        // URL Tab Live fields ------------------------------------------------
-        $tabUrlTabLive->setChildren(
-                new FieldSet(
-                        new TextField('SaferPayCheckoutUrl_Live', _t('SilvercartPaymentSaferpay.CHECKOUT_URL')),
-                        new TextField('SaferPayNvpApiServerUrl_Live', _t('SilvercartPaymentSaferpay.URL_API_NVP')),
-                        new TextField('SaferPaySoapApiServerUrl_Live', _t('SilvercartPaymentSaferpay.URL_API_SOAP'))
-                )
-        );
-
-        // Bestellstatus Tab fields -------------------------------------------
-        $OrderStatus = DataObject::get('SilvercartOrderStatus');
-        $tabOrderStatus->setChildren(
-                new FieldSet(
-                        new DropdownField('PaidOrderStatus', _t('SilvercartPaymentSaferpay.ORDERSTATUS_PAYED'), $OrderStatus->map('ID', 'Title'), $this->PaidOrderStatus),
-                        new DropdownField('CanceledOrderStatus', _t('SilvercartPaymentSaferpay.ORDERSTATUS_CANCELED'), $OrderStatus->map('ID', 'Title'), $this->CanceledOrderStatus),
-                        new DropdownField('PendingOrderStatus', _t('SilvercartPaymentSaferpay.ORDERSTATUS_PENDING'), $OrderStatus->map('ID', 'Title'), $this->PendingOrderStatus),
-                        new DropdownField('RefundedOrderStatus', _t('SilvercartPaymentSaferpay.ORDERSTATUS_REFUNDED'), $OrderStatus->map('ID', 'Title'), $this->RefundedOrderStatus)
-                )
-        );
-
-        return $fields;
+        // Shop specific attributes
+        $attributes .= "&ORDERID=" . $orderid;
+        
+        $payinit_url = $this->saferpayPayinitGateway.$attributes;
+        
+        // Create CURL session
+        $cs = curl_init($payinit_url);
+        
+        // Set CURL session options
+        curl_setopt($cs, CURLOPT_PORT, 443);                // set option for outgoing SSL requests via CURL
+        curl_setopt($cs, CURLOPT_SSL_VERIFYPEER, false);	// ignore SSL-certificate-check - session still SSL-safe
+        curl_setopt($cs, CURLOPT_HEADER, 0);                // no header in output
+        curl_setopt ($cs, CURLOPT_RETURNTRANSFER, true); 	// receive returned characters
+        
+        // Execute CURL session
+        $paymentUrl = curl_exec($cs);
+        
+        // Close CURL session
+        $ce = curl_error($cs);
+        curl_close($cs);
+        
+        // Stop if CURL is not working
+        if (strtolower( substr( $payment_url, 0, 24 ) ) != "https://www.saferpay.com") {
+            $msg = "<h1>PHP-CURL is not working correctly for outgoing SSL-calls on your server</h1>\r\n";
+            $msg .= "<h2><font color=\"red\">".htmlentities($payment_url)."&nbsp;</font></h2>\r\n";
+            $msg .= "<h2><font color=\"red\">".htmlentities($ce)."&nbsp;</font></h2>\r\n";
+            die($msg);
+        }
+        
+        return $paymentUrl;
     }
 }
