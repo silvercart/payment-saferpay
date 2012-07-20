@@ -37,9 +37,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * contains module name for display in the admin backend
      *
      * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
     protected $moduleName = 'Saferpay';
 
@@ -47,9 +44,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Indicates whether a payment module has multiple payment channels or not.
      *
      * @var bool
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
     public static $has_multiple_payment_channels = false;
 
@@ -57,9 +51,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * A list of possible payment channels.
      *
      * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
     public static $possible_payment_channels = array();
 
@@ -67,9 +58,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Attributes.
      *
      * @var array
-     * 
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
     public static $db = array(
         'saferpayAccountId_Dev'     => 'VarChar(100)',
@@ -81,11 +69,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Default records.
      *
      * @var array
-     * 
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
-    public static $default_records = array(
+    public static $defaults = array(
         'saferpayPayinitGateway'    => 'https://www.saferpay.com/hosting/CreatePayInit.asp'
     );
 
@@ -95,13 +80,9 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @param mixed $params optional
      *
      * @return FieldSet
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 30.09.2011
      */
     public function getCMSFields($params = null) {
         $fields         = parent::getCMSFieldsForModules($params);
-        $fieldLabels    = self::$field_labels;
 
         $tabApi     = new Tab('SaferpayAPI');
         $tabUrls    = new Tab('SaferpayURLs');
@@ -205,6 +186,11 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     // payment module specific methods
     // ------------------------------------------------------------------------
 
+    /**
+     * Returns the payment URL
+     *
+     * @return string
+     */
     protected function getPaymentUrl() {
         $paymentUrl = '';
         $amount = $this->getShoppingCart()->getAmount();
@@ -252,7 +238,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             $msg = "<h1>PHP-CURL is not working correctly for outgoing SSL-calls on your server</h1>\r\n";
             $msg .= "<h2><font color=\"red\">".htmlentities($payment_url)."&nbsp;</font></h2>\r\n";
             $msg .= "<h2><font color=\"red\">".htmlentities($ce)."&nbsp;</font></h2>\r\n";
-            die($msg);
+            print $msg;
+            exit();
         }
         
         return $paymentUrl;
