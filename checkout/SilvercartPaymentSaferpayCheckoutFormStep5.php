@@ -17,11 +17,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package SilvercartPaymentSaferpay
- * @subpackage Config
+ * @package Silvercart
+ * @subpackage Forms Checkout
  */
-DataObject::add_extension('SilvercartPaymentSaferpay',  'SilvercartDataObjectMultilingualDecorator');
-DataObject::add_extension('SilvercartOrder',            'SilvercartPaymentSaferpayOrder');
-DataObject::add_extension('SilvercartShoppingCart',     'SilvercartPaymentSaferpayShoppingCart');
 
-Object::add_extension('SilvercartOrderPluginProvider', 'SilvercartPaymentSaferpayOrderPlugin');
+/**
+ * OrderConfirmation
+ *
+ * @package Silvercart
+ * @subpackage Forms Checkout
+ * @author Sascha Koehler <skoehler@pixeltricks.de>
+ * @copyright Pixeltricks GmbH
+ * @since 01.10.2012
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ */
+class SilvercartPaymentSaferpayCheckoutFormStep5 extends SilvercartCheckoutFormStepDefaultOrderConfirmation {
+
+}

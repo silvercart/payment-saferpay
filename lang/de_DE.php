@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 pixeltricks GmbH
+ * Copyright 2012 pixeltricks GmbH
  *
  * This file is part of SilvercartPrepaymentPayment.
  *
@@ -34,7 +34,25 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
     $lang['de_DE'] = $lang['en_US'];
 }
 
-$lang['de_DE']['SilvercartPaymentSaferpay']['API_ACCOUNTID']            = 'Account ID';
-$lang['de_DE']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']     = 'API Entwicklungsmodus';
-$lang['de_DE']['SilvercartPaymentSaferpay']['API_LIVE_MODE']            = 'API Live Modus';
-$lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']      = 'Payinit Gateway URL';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_ACCOUNTID']                          = 'Account ID';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']                   = 'API Entwicklungsmodus';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_LIVE_MODE']                          = 'API Live Modus';
+$lang['de_DE']['SilvercartPaymentSaferpay']['ENTER_DATA_AT_SAFERPAY']                 = 'Bezahlung bei Saferpay durchführen';
+$lang['de_DE']['SilvercartPaymentSaferpay']['INFOTEXT_CHECKOUT']                      = 'Die Zahlung erfolgt per Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpay']['ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE'] = 'Kaufen & weiter zur Bezahlung bei Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpay']['ORDERSTATUS_CANCELED']                   = 'Bestellstatus für Meldung "abgebrochen"';
+$lang['de_DE']['SilvercartPaymentSaferpay']['ORDERSTATUS_PAYED']                      = 'Bestellstatus für Meldung "bezahlt"';
+$lang['de_DE']['SilvercartPaymentSaferpay']['PLURALNAME']                             = 'Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpay']['SINGULARNAME']                           = 'Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']                 = 'Payconfirm Gateway URL';
+$lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'PaycompleteGateway URL';
+$lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit Gateway URL';
+
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_1'] = 'Benötigte Attribute fehlen in Request';
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_2'] = 'Es wurden nicht alle von Saferpay Daten gesendet';
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_3'] = 'Es wurde eine falsche AccountID von Saferpay gesendet';
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_4'] = 'Es wurde ein falsches Token von Saferpay gesendet';
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_5'] = 'Verifikation bei Saferpay ist fehlgeschlagen';
+
+$lang['de_DE']['SilvercartPaymentSaferpayLanguage']['SINGULARNAME'] = 'Übersetzung der Zahlart Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpayLanguage']['PLURALNAME']   = 'Übersetzungen der Zahlart Saferpay';

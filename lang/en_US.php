@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 pixeltricks GmbH
+ * Copyright 2012 pixeltricks GmbH
  *
  * This file is part of SilvercartPaymentPaypal.
  *
@@ -34,7 +34,25 @@ global $lang;
 
 
 
-$lang['en_US']['SilvercartPaymentSaferpay']['API_ACCOUNTID']            = 'Account ID';
-$lang['en_US']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']     = 'API development mode';
-$lang['en_US']['SilvercartPaymentSaferpay']['API_LIVE_MODE']            = 'API live mode';
-$lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']      = 'Payinit gateway URL';
+$lang['en_US']['SilvercartPaymentSaferpay']['API_ACCOUNTID']                          = 'Account ID';
+$lang['en_US']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']                   = 'API development mode';
+$lang['en_US']['SilvercartPaymentSaferpay']['API_LIVE_MODE']                          = 'API live mode';
+$lang['en_US']['SilvercartPaymentSaferpay']['ENTER_DATA_AT_SAFERPAY']                 = 'Pay at Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['INFOTEXT_CHECKOUT']                      = 'payment via Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['ORDERSTATUS_CANCELED']                   = 'orderstatus for notification "canceled"';
+$lang['en_US']['SilvercartPaymentSaferpay']['ORDERSTATUS_PAYED']                      = 'orderstatus for notification "payed"';
+$lang['en_US']['SilvercartPaymentSaferpay']['ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE'] = 'Proceed to payment via Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['PLURALNAME']                             = 'Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['SINGULARNAME']                           = 'Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']                 = 'Payconfirm gateway URL';
+$lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'Paycomplete gateway URL';
+$lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit gateway URL';
+
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_1'] = 'Required attributes are missing in request';
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_2'] = 'Not all data has been sent by Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_3'] = 'A wrong accountId has been sent by Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_4'] = 'A wrong token has been sent by Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_5'] = 'Saferpay verification failed';
+
+$lang['en_US']['SilvercartPaymentSaferpayLanguage']['SINGULARNAME'] = 'Translation of the payment method Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpayLanguage']['PLURALNAME']   = 'Translations of the payment method Saferpay';
