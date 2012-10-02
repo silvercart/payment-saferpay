@@ -421,10 +421,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             $this->Log('processPaymentAfterOrder', $answer);
             $this->addError($answer);
             $this->order->setOrderStatusByID($this->canceledOrderStatus);
+            $this->order->sendConfirmationMail();
 
             return false;
         } else {
             $this->order->setOrderStatusByID($this->successOrderStatus);
+            $this->order->sendConfirmationMail();
 
             parent::processPaymentAfterOrder($this->order);
         }

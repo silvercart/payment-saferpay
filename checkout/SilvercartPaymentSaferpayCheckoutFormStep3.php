@@ -32,4 +32,17 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartPaymentSaferpayCheckoutFormStep3 extends SilvercartCheckoutFormStepProcessOrder {
+
+    /**
+     * processor method
+     *
+     * @return void
+     *
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 04.04.2011
+     */
+    public function process() {
+        $this->sendConfirmationMail = false;
+        parent::process();
+    }
 }
