@@ -43,8 +43,8 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
     public function extraStatics() {
         return array(
             'db' => array(
-                'saferpayToken' => 'VarChar(150)',
-                'saferpayID'    => 'VarChar(150)'
+                'saferpayToken'      => 'VarChar(150)',
+                'saferpayIdentifier' => 'VarChar(150)'
             )
         );
     }
@@ -58,7 +58,7 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
      * @since 01.10.2012
      */
     public function getSaferpayID() {
-        return $this->owner->getField('saferpayID');
+        return $this->owner->getField('saferpayIdentifier');
     }
 
     /**
@@ -84,7 +84,7 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
      * @since 01.10.2012
      */
     public function saveSaferpayID($saferpayID) {
-        $this->owner->setField('saferpayID', $saferpayID);
+        $this->owner->setField('saferpayIdentifier', (string) $saferpayID);
         $this->owner->write();
     }
 
@@ -99,7 +99,7 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
      * @since 01.10.2012
      */
     public function saveSaferpayToken($saferpayToken) {
-        $this->owner->setField('saferpayToken', $saferpayToken);
+        $this->owner->setField('saferpayToken', (string) $saferpayToken);
         $this->owner->write();
     }
 }

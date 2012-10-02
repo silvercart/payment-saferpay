@@ -34,9 +34,16 @@ global $lang;
 
 
 
+$lang['en_US']['SilvercartOrderStatus']['SAFERPAY_CANCELED']    = 'Saferpay canceled';
+$lang['en_US']['SilvercartOrderStatus']['SAFERPAY_ERROR']       = 'Saferpay error';
+$lang['en_US']['SilvercartOrderStatus']['SAFERPAY_SUCCESS']     = 'Paid via Saferpay';
+
 $lang['en_US']['SilvercartPaymentSaferpay']['API_ACCOUNTID']                          = 'Account ID';
 $lang['en_US']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']                   = 'API development mode';
 $lang['en_US']['SilvercartPaymentSaferpay']['API_LIVE_MODE']                          = 'API live mode';
+$lang['en_US']['SilvercartPaymentSaferpay']['AUTOCLOSE']                              = 'number of seconds (0 to n) after which the payer is automatically forwarded';
+$lang['en_US']['SilvercartPaymentSaferpay']['CCCVC']                                  = 'Query for card verification value (CVV/CVC2)';
+$lang['en_US']['SilvercartPaymentSaferpay']['CCNAME']                                 = 'Ask the name of the card or account holder';
 $lang['en_US']['SilvercartPaymentSaferpay']['ENTER_DATA_AT_SAFERPAY']                 = 'Pay at Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpay']['INFOTEXT_CHECKOUT']                      = 'payment via Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpay']['ORDERSTATUS_CANCELED']                   = 'orderstatus for notification "canceled"';
@@ -44,6 +51,7 @@ $lang['en_US']['SilvercartPaymentSaferpay']['ORDERSTATUS_PAYED']                
 $lang['en_US']['SilvercartPaymentSaferpay']['ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE'] = 'Proceed to payment via Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpay']['PLURALNAME']                             = 'Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpay']['SINGULARNAME']                           = 'Saferpay';
+$lang['en_US']['SilvercartPaymentSaferpay']['SHOWLANGUAGES']                          = 'Display of the language selection in the menu of the Saferpay VT';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']                 = 'Payconfirm gateway URL';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'Paycomplete gateway URL';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit gateway URL';
@@ -53,6 +61,7 @@ $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_2'] = 'Not all data has 
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_3'] = 'A wrong accountId has been sent by Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_4'] = 'A wrong token has been sent by Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_5'] = 'Saferpay verification failed';
+$lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_6'] = 'Canceled by Saferpay';
 
 $lang['en_US']['SilvercartPaymentSaferpayLanguage']['SINGULARNAME'] = 'Translation of the payment method Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpayLanguage']['PLURALNAME']   = 'Translations of the payment method Saferpay';

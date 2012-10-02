@@ -44,7 +44,9 @@ class SilvercartPaymentSaferpayCheckoutFormStep2 extends SilvercartCheckoutFormS
      */
     public function process() {
         if (parent::process()) {
-            $this->paymentMethodObj->processReturnJumpFromPaymentProvider();
+            if (!$this->paymentMethodObj->processReturnJumpFromPaymentProvider()) {
+                return $this->renderError();
+            }
         }
     }
 }

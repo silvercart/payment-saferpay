@@ -96,6 +96,11 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         'saferpayPayinitGateway'     => 'VarChar(100)',
         'saferpayPayconfirmGateway'  => 'VarChar(100)',
         'saferpayPaycompleteGateway' => 'VarChar(100)',
+
+        'autoclose'     => 'Int',
+        'showLanguages' => 'Boolean(0)',
+        'cccvc'         => 'Boolean(1)',
+        'ccname'        => 'Boolean(1)',
     );
 
 
@@ -184,8 +189,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @return FieldSet
      */
     public function getCMSFields($params = null) {
-        $fields         = parent::getCMSFieldsForModules($params);
-
+        $fields     = parent::getCMSFieldsForModules($params);
         $tabApi     = new Tab('SaferpayAPI');
         $tabUrls    = new Tab('SaferpayURLs');
 
@@ -227,6 +231,22 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         $tabUrls->push(
             new TextField('saferpayPaycompleteGateway', _t('SilvercartPaymentSaferpay.URL_PAYCOMPLETE_GATEWAY'))
         );
+        $fields->addFieldToTab(
+            'Sections.Basic',
+            new TextField('autoclose', _t('SilvercartPaymentSaferpay.AUTOCLOSE'))
+        );
+        $fields->addFieldToTab(
+            'Sections.Basic',
+            new CheckboxField('showLanguages', _t('SilvercartPaymentSaferpay.SHOWLANGUAGES'))
+        );
+        $fields->addFieldToTab(
+            'Sections.Basic',
+            new CheckboxField('cccvc', _t('SilvercartPaymentSaferpay.CCCVC'))
+        );
+        $fields->addFieldToTab(
+            'Sections.Basic',
+            new CheckboxField('ccname', _t('SilvercartPaymentSaferpay.CCNAME'))
+        );
 
         return $fields;
     }
@@ -248,11 +268,14 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     public function processPaymentBeforeOrder() {
         $paymentUrl = $this->getPaymentUrl();
 
-        $this->controller->addCompletedStep($this->controller->getCurrentStep());
-        $this->controller->addCompletedStep($this->controller->getNextStep());
-        $this->controller->setCurrentStep($this->controller->getNextStep());
+        if ($paymentUrl === false) {
+            return false;
+        } else {
+            $this->controller->addCompletedStep($this->controller->getCurrentStep());
+            $this->controller->setCurrentStep($this->controller->getNextStep());
 
-        Director::redirect($paymentUrl);
+            Director::redirect($paymentUrl);
+        }
     }
 
     /**
@@ -265,6 +288,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 30.09.2011
      */
     public function processReturnJumpFromPaymentProvider() {
+        $shoppingCart   = $this->getShoppingCart();
         $error          = 0;
         $msgType        = null;
         $saferpayId     = null;
@@ -276,8 +300,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         $data           = null;
         $eci            = null;
         $ecimsg         = null;
-
-        parent::processReturnJumpFromPaymentProvider();
 
         if (array_key_exists('SIGNATURE', $_REQUEST)) {
             $signature = urldecode($_REQUEST['SIGNATURE']);
@@ -330,7 +352,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             if ($accountId != $this->getAccountId()) {
                 $error = 3;
             }
-            if ($saferpayToken != $this->getShoppingCart()->getSaferpayToken()) {
+            if ($saferpayToken != $shoppingCart->getSaferpayToken()) {
                 $error = 4;
             }
 
@@ -350,27 +372,23 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
                     if (strtoupper(substr($verification, 0, 3)) != "OK:") {
                         $error = 5;
                     } else {
-                        $this->getShoppingCart()->saveSaferpayID($saferpayId);
+                        $shoppingCart->saveSaferpayID($saferpayId);
                     }
                 } else {
-                    print "MsgType: ".$msgType."<br />";
-                    exit();
+                    $error = 6;
                 }
             }
         }
 
         if ($error > 0) {
             $this->Log('processReturnJumpFromPaymentProvider', var_export($_REQUEST, true));
-
             $errorMsg = _t('SilvercartPaymentSaferpayError.ERROR_'.$error);
 
-            print "FEHLER: ".$errorMsg."<br />";
-            exit();
-        } else {
+            $this->addError($errorMsg);
 
-            print "ALLES OK";
-            exit();
-            $this->controller->NextStep();
+            return false;
+        } else {
+            parent::processReturnJumpFromPaymentProvider();
         }
     }
 
@@ -386,7 +404,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     public function processPaymentAfterOrder($orderObj = array()) {
         $saferpayId     = $this->order->getSaferpayId();
-        $saferpayToken  = $this->order->getSaferpayIToken();
+        $saferpayToken  = $this->order->getSaferpayToken();
 
         $paycomplete_url = $this->getCompleteUrl($saferpayId, null);
 
@@ -400,8 +418,14 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         curl_close($cs);
 
         if (strtoupper($answer) != "OK") {
-            die("<h1>Confirmation OK - Capture failed</h1>$answer");
+            $this->Log('processPaymentAfterOrder', $answer);
+            $this->addError($answer);
+            $this->order->setOrderStatusByID($this->canceledOrderStatus);
+
+            return false;
         } else {
+            $this->order->setOrderStatusByID($this->successOrderStatus);
+
             parent::processPaymentAfterOrder($this->order);
         }
     }
@@ -536,24 +560,38 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 01.10.2012
      */
     protected function getPaymentUrl() {
-        $totalAmount   = $this->getShoppingCart()->getAmountTotal();
-        $saferpayToken = $this->createSaferpayToken();
-        $this->getShoppingCart()->saveSaferpayToken($saferpayToken);
-        
-        // Mandatory attributes
-        $attributes  = "?ACCOUNTID=".   $this->getAccountId();
-        $attributes .= "&AMOUNT=".      $totalAmount->getAmount() * 100;
-        $attributes .= "&CURRENCY=".    $totalAmount->getCurrency();
-        $attributes .= "&DELIVERY=no";
-        $attributes .= "&DESCRIPTION=". urlencode($this->getDescription());
-        $attributes .= "&SUCCESSLINK=". $this->getReturnLink();
-        $attributes .= "&FAILLINK=".    $this->getReturnLink();
-        $attributes .= "&BACKLINK=".    $this->getReturnLink();
-        $attributes .= "&NOTIFIYURL=".  $this->getNotificationUrl();
+        $checkoutData = $this->controller->getCombinedStepData();
+        $shoppingCart = $this->getShoppingCart();
 
-        // Additional attributes
-        $attributes .= "&CCCVC=yes"; // input of cardsecuritynumber mandatory
-        $attributes .= "&CCNAME=yes"; // input of cardholder name mandatory
+        if (array_key_exists('ShippingMethod', $checkoutData)) {
+            $shoppingCart->setShippingMethodID($checkoutData['ShippingMethod']);
+        }
+        if (array_key_exists('PaymentMethod', $checkoutData)) {
+            $shoppingCart->setPaymentMethodID($checkoutData['PaymentMethod']);
+        }
+
+        $totalAmount   = $shoppingCart->getAmountTotal();
+        $saferpayToken = $this->createSaferpayToken();
+        $shoppingCart->saveSaferpayToken($saferpayToken);
+
+        $showLanguages = $this->showLanguages ? 'yes' : 'no';
+        $cccvc         = $this->cccvc ?  'yes' : 'no';
+        $ccname        = $this->ccname ? 'yes' : 'no';
+
+        // Mandatory attributes
+        $attributes  = "?ACCOUNTID=".       $this->getAccountId();
+        $attributes .= "&AMOUNT=".          $totalAmount->getAmount() * 100;
+        $attributes .= "&CURRENCY=".        $totalAmount->getCurrency();
+        $attributes .= "&DELIVERY=no";
+        $attributes .= "&DESCRIPTION=".     urlencode($this->getDescription());
+        $attributes .= "&SUCCESSLINK=".     $this->getReturnLink();
+        $attributes .= "&FAILLINK=".        $this->getReturnLink();
+        $attributes .= "&BACKLINK=".        $this->getReturnLink().'Goto/Step/2';
+        $attributes .= "&NOTIFIYURL=".      $this->getNotificationUrl();
+        $attributes .= "&AUTOCLOSE=".       (int) $this->autoclose;
+        $attributes .= "&SHOWLANGUAGES=".   $showLanguages;
+        $attributes .= "&CCCVC=".           $cccvc;
+        $attributes .= "&CCNAME=".          $ccname;
 
         // Shop specific attributes
         $attributes .= "&ORDERID=".urlencode($saferpayToken);
@@ -578,11 +616,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         
         // Stop if CURL is not working
         if (strtolower(substr($paymentUrl, 0, 24)) != "https://www.saferpay.com") {
-            $msg = "<h1>PHP-CURL is not working correctly for outgoing SSL-calls on your server</h1>\r\n";
-            $msg .= "<h2><font color=\"red\">".htmlentities($paymentUrl)."&nbsp;</font></h2>\r\n";
-            $msg .= "<h2><font color=\"red\">".htmlentities($ce)."&nbsp;</font></h2>\r\n";
-            print $msg;
-            exit();
+            $msg = "<p>PHP-CURL is not working correctly for outgoing SSL-calls on your server:<br/>";
+            $msg .= htmlentities($paymentUrl)."<br/>";
+            $msg .= htmlentities($ce)."</p>";
+            $this->addError($msg);
+
+            return false;
         }
         
         return $paymentUrl;
@@ -622,6 +661,10 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
                 $paymentMethod->setField('saferpayPayinitGateway',     'https://www.saferpay.com/hosting/CreatePayInit.asp');
                 $paymentMethod->setField('saferpayPayconfirmGateway',  'https://www.saferpay.com/hosting/VerifyPayConfirm.asp');
                 $paymentMethod->setField('saferpayPaycompleteGateway', 'https://www.saferpay.com/hosting/PayComplete.asp');
+                $paymentMethod->setField('autoclose',                  0);
+                $paymentMethod->setField('showLanguages',              0);
+                $paymentMethod->setField('cccvc',                      1);
+                $paymentMethod->setField('ccname',                     1);
 
                 $paymentMethod->write();
             }

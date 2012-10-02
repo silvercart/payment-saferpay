@@ -57,9 +57,9 @@ class SilvercartPaymentSaferpayNotification extends DataObject {
     public function process() {
         // load payment module
         $paymentModule = DataObject::get_one(
-            'SilvercartPaymentSaferpay',
+            'SilvercartPaymentMethod',
             sprintf(
-                "`Name` = '%s'",
+                "`ClassName` = 'SilvercartPayment%s'",
                 $this->moduleName
             )
         );
@@ -115,8 +115,6 @@ class SilvercartPaymentSaferpayNotification extends DataObject {
                 $paymentModule->Log('SilvercartPaymentSaferpayNotification', 'Das PaymentPaypalOrder Objekt konnte nicht geladen werden f√ºr die orderId '.$customVariables['order_id']);
             }
             */
-        } else {
-            $paymentModule->Log('SilvercartPaymentSaferpayNotification', $this->moduleName.' module not found');
         }
     }
 }

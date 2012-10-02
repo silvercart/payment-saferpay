@@ -34,9 +34,16 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
     $lang['de_DE'] = $lang['en_US'];
 }
 
+$lang['de_DE']['SilvercartOrderStatus']['SAFERPAY_CANCELED']    = 'Saferpay abgebrochen';
+$lang['de_DE']['SilvercartOrderStatus']['SAFERPAY_ERROR']       = 'Saferpay Fehler';
+$lang['de_DE']['SilvercartOrderStatus']['SAFERPAY_SUCCESS']     = 'Bezahlt via Saferpay';
+
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_ACCOUNTID']                          = 'Account ID';
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']                   = 'API Entwicklungsmodus';
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_LIVE_MODE']                          = 'API Live Modus';
+$lang['de_DE']['SilvercartPaymentSaferpay']['AUTOCLOSE']                              = 'Anzahl Sekunden (0 bis n) bis zur automatischen Weiterleitung nach erfolgreicher Zahlung';
+$lang['de_DE']['SilvercartPaymentSaferpay']['CCCVC']                                  = 'Prüfsumme der Kreditkarte abfragen';
+$lang['de_DE']['SilvercartPaymentSaferpay']['CCNAME']                                 = 'Name des Kreditkartenbesitzers abfragen';
 $lang['de_DE']['SilvercartPaymentSaferpay']['ENTER_DATA_AT_SAFERPAY']                 = 'Bezahlung bei Saferpay durchführen';
 $lang['de_DE']['SilvercartPaymentSaferpay']['INFOTEXT_CHECKOUT']                      = 'Die Zahlung erfolgt per Saferpay';
 $lang['de_DE']['SilvercartPaymentSaferpay']['ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE'] = 'Kaufen & weiter zur Bezahlung bei Saferpay';
@@ -44,6 +51,7 @@ $lang['de_DE']['SilvercartPaymentSaferpay']['ORDERSTATUS_CANCELED']             
 $lang['de_DE']['SilvercartPaymentSaferpay']['ORDERSTATUS_PAYED']                      = 'Bestellstatus für Meldung "bezahlt"';
 $lang['de_DE']['SilvercartPaymentSaferpay']['PLURALNAME']                             = 'Saferpay';
 $lang['de_DE']['SilvercartPaymentSaferpay']['SINGULARNAME']                           = 'Saferpay';
+$lang['de_DE']['SilvercartPaymentSaferpay']['SHOWLANGUAGES']                          = 'Anzeige der Sprachauswahl im Saferpay VT Menü';
 $lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']                 = 'Payconfirm Gateway URL';
 $lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'PaycompleteGateway URL';
 $lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit Gateway URL';
@@ -53,6 +61,7 @@ $lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_2'] = 'Es wurden nicht a
 $lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_3'] = 'Es wurde eine falsche AccountID von Saferpay gesendet';
 $lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_4'] = 'Es wurde ein falsches Token von Saferpay gesendet';
 $lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_5'] = 'Verifikation bei Saferpay ist fehlgeschlagen';
+$lang['de_DE']['SilvercartPaymentSaferpayError']['ERROR_6'] = 'Abbruch durch Saferpay';
 
 $lang['de_DE']['SilvercartPaymentSaferpayLanguage']['SINGULARNAME'] = 'Übersetzung der Zahlart Saferpay';
 $lang['de_DE']['SilvercartPaymentSaferpayLanguage']['PLURALNAME']   = 'Übersetzungen der Zahlart Saferpay';

@@ -61,7 +61,9 @@ class SilvercartPaymentSaferpayCheckoutFormStep1 extends SilvercartCheckoutFormS
             $this->paymentMethodObj->setCancelLink(Director::absoluteURL($this->controller->Link()) . 'Cancel');
             $this->paymentMethodObj->setReturnLink(Director::absoluteURL($this->controller->Link()));
 
-            $this->paymentMethodObj->processPaymentBeforeOrder();
+            if (!$this->paymentMethodObj->processPaymentBeforeOrder()) {
+                return $this->renderError();
+            }
         }
     }
 }

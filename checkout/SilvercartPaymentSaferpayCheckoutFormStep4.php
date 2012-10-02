@@ -60,6 +60,8 @@ class SilvercartPaymentSaferpayCheckoutFormStep4 extends SilvercartCheckoutFormS
             if ($paymentSuccessful) {
                 $this->controller->addCompletedStep();
                 $this->controller->NextStep();
+            } else {
+                return $this->renderError();
             }
         }
     }

@@ -37,17 +37,20 @@ class SilvercartPaymentSaferpayOrderPlugin extends DataObjectDecorator {
      * Injects the saferpay information from the shopping cart into the order
      * object.
      *
-     * @param SilvercartOrder        &$silvercartOrder        The SilverCart order object
-     * @param SilvercartShoppingCart &$silvercartShoppingCart The shopping cart object
+     * @param array           $arguments        Arguments
+     * @param SilvercartOrder &$silvercartOrder The SilverCart order object
      *
      * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 01.10.2012
      */
-    public function pluginCreateFromShoppingCart(&$silvercartOrder, &$silvercartShoppingCart) {
-        $silvercartOrder->setField('saferpayID',    $silvercartShoppingCart->getSaferpayId());
-        $silvercartOrder->setField('saferpayToken', $silvercartShoppingCart->getSaferpayToken());
-        $silvercartOrder->write();
+    public function pluginCreateFromShoppingCart($arguments, &$silvercartOrder) {
+        $order                  = $arguments[0];
+        $silvercartShoppingCart = $arguments[1];
+
+        $order->saferpayIdentifier  = $silvercartShoppingCart->getSaferpayId();
+        $order->saferpayToken       = $silvercartShoppingCart->getSaferpayToken();
+        $order->write();
     }
 }
