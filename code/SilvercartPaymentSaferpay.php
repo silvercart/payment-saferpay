@@ -587,8 +587,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         $attributes .= "&DELIVERY=no";
         $attributes .= "&DESCRIPTION=".     urlencode($this->getDescription());
         $attributes .= "&SUCCESSLINK=".     $this->getReturnLink();
-        $attributes .= "&FAILLINK=".        $this->getReturnLink();
-        $attributes .= "&BACKLINK=".        $this->getReturnLink().'Goto/Step/2';
+        $attributes .= "&FAILLINK=".        $this->getCancelLink();
+        $attributes .= "&BACKLINK=".        $this->getCancelLink();
         $attributes .= "&NOTIFIYURL=".      $this->getNotificationUrl();
         $attributes .= "&AUTOCLOSE=".       (int) $this->autoclose;
         $attributes .= "&SHOWLANGUAGES=".   $showLanguages;
