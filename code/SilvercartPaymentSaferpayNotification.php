@@ -67,54 +67,6 @@ class SilvercartPaymentSaferpayNotification extends DataObject {
         if ($paymentModule) {
             $paymentModule->Log('SilvercartPaymentSaferpayNotification', 'Notification received');
             $paymentModule->Log('SilvercartPaymentSaferpayNotification', var_export($_REQUEST, true));
-
-            //set the order's status to payed if the payment is received
-            /*
-            $orderObj = DataObject::get_by_id(
-                'SilvercartOrder',
-                $orderId
-            );
-
-            if ($orderObj) {
-                if (in_array($ipnVariables['PAYMENTSTATUS'], $paymentModule->successPaypalStatus)) {
-                    $orderObj->setOrderStatus(DataObject::get_by_id('SilvercartOrderStatus', $paymentModule->PaidOrderStatus));
-                }
-                if (in_array($ipnVariables['PAYMENTSTATUS'], $paymentModule->failedPaypalStatus)) {
-                    $orderObj->setOrderStatus(DataObject::get_by_id('SilvercartOrderStatus', $paymentModule->CanceledOrderStatus));
-                }
-                if (in_array($ipnVariables['PAYMENTSTATUS'], $paymentModule->refundedPaypalStatus)) {
-                    $orderObj->setOrderStatus(DataObject::get_by_id('SilvercartOrderStatus', $paymentModule->RefundedOrderStatus));
-                }
-                if (in_array($ipnVariables['PAYMENTSTATUS'], $paymentModule->pendingPaypalStatus)) {
-                    $orderObj->setOrderStatus(DataObject::get_by_id('SilvercartOrderStatus', $paymentModule->PendingOrderStatus));
-                }
-            }
-
-            //load the payment modul of the payment method
-            //
-            // Bestellmodul der Zahlungsart laden
-            $paymentPaypalOrder = DataObject::get_one(
-                'SilvercartPaymentPaypalOrder',
-                sprintf(
-                    "\"orderId\" = '%s'",
-                    $customVariables['order_id']
-                )
-            );
-
-            if ($paymentPaypalOrder) {
-                //save paypal's data
-                //
-                // Von Paypal gelieferte Daten speichern
-                $paymentPaypalOrder->updateOrder(
-                    $customVariables['order_id'],
-                    $payerId,
-                    $ipnVariables
-                );
-                $paymentModule->Log('SilvercartPaymentSaferpayNotification', 'Bestellstatus fuer Bestellung mit ID '.$customVariables['order_id'].'wurde aktualisiert.');
-            } else {
-                $paymentModule->Log('SilvercartPaymentSaferpayNotification', 'Das PaymentPaypalOrder Objekt konnte nicht geladen werden f√ºr die orderId '.$customVariables['order_id']);
-            }
-            */
         }
     }
 }
