@@ -87,9 +87,9 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @var array
      */
     public static $db = array(
-        'canceledOrderStatus'       => 'Int',
-        'paidOrderStatus'           => 'Int',
-        'successOrderStatus'        => 'Int',
+        'sfCanceledOrderStatus'     => 'Int',
+        'sfPaidOrderStatus'         => 'Int',
+        'sfSuccessOrderStatus'      => 'Int',
 
         'saferpayAccountId_Dev'      => 'VarChar(100)',
         'saferpayAccountId_Live'     => 'VarChar(100)',
@@ -420,7 +420,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         if (strtoupper($answer) != "OK") {
             $this->Log('processPaymentAfterOrder', $answer);
             $this->addError($answer);
-            $this->order->setOrderStatusByID($this->canceledOrderStatus);
+            $this->order->setOrderStatusByID($this->sfCanceledOrderStatus);
             $this->order->sendConfirmationMail();
 
             return false;
@@ -653,12 +653,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         parent::createRequiredOrderStatus($requiredStatus);
         parent::createLogoImageObjects($paymentLogos, 'SilvercartPaymentSaferpay');
 
-        $paymentMethods = DataObject::get('SilvercartPaymentSaferpay', "`paidOrderStatus`=0");
+        $paymentMethods = DataObject::get('SilvercartPaymentSaferpay', "`sfPaidOrderStatus`=0");
         if ($paymentMethods) {
             foreach ($paymentMethods as $paymentMethod) {
-                $paymentMethod->paidOrderStatus    = DataObject::get_one('SilvercartOrderStatus', "`Code`='payed'")->ID;
-                $paymentMethod->successOrderStatus = DataObject::get_one('SilvercartOrderStatus', "`Code`='saferpay_success'")->ID;
-                $paymentMethod->failedOrderStatus  = DataObject::get_one('SilvercartOrderStatus', "`Code`='saferpay_error'")->ID;
+                $paymentMethod->sfPaidOrderStatus    = DataObject::get_one('SilvercartOrderStatus', "`Code`='payed'")->ID;
+                $paymentMethod->sfSuccessOrderStatus = DataObject::get_one('SilvercartOrderStatus', "`Code`='saferpay_success'")->ID;
+                $paymentMethod->sfFailedOrderStatus  = DataObject::get_one('SilvercartOrderStatus', "`Code`='saferpay_error'")->ID;
 
                 $paymentMethod->setField('saferpayPayinitGateway',     'https://www.saferpay.com/hosting/CreatePayInit.asp');
                 $paymentMethod->setField('saferpayPayconfirmGateway',  'https://www.saferpay.com/hosting/VerifyPayConfirm.asp');
