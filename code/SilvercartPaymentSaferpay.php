@@ -403,9 +403,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 01.10.2012
      */
     public function processPaymentAfterOrder($orderObj = array()) {
-        $saferpayId     = $this->order->getSaferpayId();
-        $saferpayToken  = $this->order->getSaferpayToken();
-
+        $saferpayId      = $this->order->getSaferpayId();
         $paycomplete_url = $this->getCompleteUrl($saferpayId, null);
 
         $cs = curl_init($paycomplete_url);
