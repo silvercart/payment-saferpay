@@ -154,7 +154,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 01.10.2012
      */
     public function getAccountId() {
-        if ($this->mode == 'live') {
+        if ($this->mode == 'Live') {
             return $this->saferpayAccountId_Live;
         } else {
             return $this->saferpayAccountId_Dev;
