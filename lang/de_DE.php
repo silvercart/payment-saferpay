@@ -39,6 +39,7 @@ $lang['de_DE']['SilvercartOrderStatus']['SAFERPAY_ERROR']       = 'Saferpay Fehl
 $lang['de_DE']['SilvercartOrderStatus']['SAFERPAY_SUCCESS']     = 'Bezahlt via Saferpay';
 
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_ACCOUNTID']                          = 'Account ID';
+$lang['de_DE']['SilvercartPaymentSaferpay']['API_PASSWORD']                           = 'API Password (Wird nur für Saferpay Business Accounts benötigt. Wenn nicht benötigt, leer lassen.)';
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_DEVELOPMENT_MODE']                   = 'API Entwicklungsmodus';
 $lang['de_DE']['SilvercartPaymentSaferpay']['API_LIVE_MODE']                          = 'API Live Modus';
 $lang['de_DE']['SilvercartPaymentSaferpay']['AUTOCLOSE']                              = 'Anzahl Sekunden (0 bis n) bis zur automatischen Weiterleitung nach erfolgreicher Zahlung';

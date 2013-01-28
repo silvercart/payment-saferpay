@@ -91,11 +91,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         'sfPaidOrderStatus'         => 'Int',
         'sfSuccessOrderStatus'      => 'Int',
 
-        'saferpayAccountId_Dev'      => 'VarChar(100)',
-        'saferpayAccountId_Live'     => 'VarChar(100)',
-        'saferpayPayinitGateway'     => 'VarChar(100)',
-        'saferpayPayconfirmGateway'  => 'VarChar(100)',
-        'saferpayPaycompleteGateway' => 'VarChar(100)',
+        'saferpayAccountId_Dev'         => 'VarChar(100)',
+        'saferpayAccountId_Live'        => 'VarChar(100)',
+        'saferpayAccountPassword_Live'  => 'VarChar(100)',
+        'saferpayPayinitGateway'        => 'VarChar(100)',
+        'saferpayPayconfirmGateway'     => 'VarChar(100)',
+        'saferpayPaycompleteGateway'    => 'VarChar(100)',
 
         'autoclose'     => 'Int',
         'showLanguages' => 'Boolean(0)',
@@ -149,16 +150,37 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Returns the saferpay account ID
      *
      * @return string The account ID
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getAccountId() {
+        $accountID = null;
         if ($this->mode == 'Live') {
-            return $this->saferpayAccountId_Live;
+            $accountID = $this->saferpayAccountId_Live;
         } else {
-            return $this->saferpayAccountId_Dev;
+            $accountID = $this->saferpayAccountId_Dev;
         }
+        return $accountID;
+    }
+
+    /**
+     * Returns the saferpay password dependant on dev/live mode
+     * 
+     * Special for testaccount: password for hosting-capture neccessary.
+     * Special for bussiness account: password for hosting-capture neccessary.
+     * Not needed for standard-saferpay-eCommerce-accounts
+     *
+     * @return string
+     */
+    public function getPassword() {
+        $password = null;
+        if ($this->mode == 'Live') {
+            $password = $this->saferpayAccountPassword_Live;
+            if (empty($password)) {
+                $password = null;
+            }
+        } else {
+            $password = 'XAjc3Kna';
+        }
+        return $password;
     }
 
     /**
@@ -217,7 +239,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         // API Tab Live fields ------------------------------------------------
         $tabApiTabLive->setChildren(
             new FieldSet(
-                new TextField('saferpayAccountId_Live', _t('SilvercartPaymentSaferpay.API_ACCOUNTID'))
+                new TextField('saferpayAccountId_Live',         _t('SilvercartPaymentSaferpay.API_ACCOUNTID')),
+                new TextField('saferpayAccountPassword_Live',   _t('SilvercartPaymentSaferpay.API_PASSWORD'))
             )
         );
 
@@ -510,22 +533,24 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      *
      * @return string
      *
-     * @author Sascha Koehler <skoehler@standardized.de>
-     * @since 01.10.2012
+     * @author Sascha Koehler <skoehler@standardized.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 28.01.2013
      */
     protected function getCompleteUrl($id, $token) {
-        $attributes  = "?ACCOUNTID=".$this->getAccountId();
-        $attributes .= "&ID=".urlencode($id);
-        $attributes .= "&TOKEN=".urlencode($token);
+        $attributes  = "?ACCOUNTID=" . $this->getAccountId();
+        $attributes .= "&ID=" . urlencode($id);
+        $attributes .= "&TOKEN=" . urlencode($token);
 
         $paycomplete_url = $this->saferpayPaycompleteGateway.$attributes;
 
         // **************************************************
-        // * Special for testaccount: Passwort for hosting-capture neccessary.
+        // * Special for testaccount: password for hosting-capture neccessary.
+        // * Special for bussiness account: password for hosting-capture neccessary.
         // * Not needed for standard-saferpay-eCommerce-accounts
         // **************************************************
-        if (substr($this->getAccountId(), 0, 6) == "99867-") {
-            $paycomplete_url .= "&spPassword=XAjc3Kna";
+        $password = $this->getPassword();
+        if (!is_null($password)) {
+            $paycomplete_url .= "&spPassword=" . $password;
         }
 
         return $paycomplete_url;
