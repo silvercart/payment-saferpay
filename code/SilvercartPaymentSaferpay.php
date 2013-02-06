@@ -17,15 +17,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package SilvercartPaymentSaferpay
- * @subpackage Base
+ * @package Silvercart
+ * @subpackage Payment_Saferpay
  */
 
 /**
  * Enables payment via saferpay.
  *
- * @package SilvercartPaymentSaferpay
- * @subpackage Base
+ * @package Silvercart
+ * @subpackage Payment_Saferpay
  * @author Sascha Koehler <skoehler@pixeltricks.de>
  * @since 30.09.2011
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License

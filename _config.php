@@ -17,8 +17,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package SilvercartPaymentSaferpay
- * @subpackage Config
+ * @package Silvercart
+ * @subpackage Payment_Saferpay
+ * @ignore
  */
 DataObject::add_extension('SilvercartPaymentSaferpay',  'SilvercartDataObjectMultilingualDecorator');
 DataObject::add_extension('SilvercartOrder',            'SilvercartPaymentSaferpayOrder');

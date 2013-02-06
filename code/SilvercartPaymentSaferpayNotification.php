@@ -18,7 +18,7 @@
  * along with SilvercartPaypalPayment.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @package Silvercart
- * @subpackage Payment
+ * @subpackage Payment_Saferpay
  */
 
 /**
@@ -27,7 +27,7 @@
  * @return void
  *
  * @package Silvercart
- * @subpackage Payment
+ * @subpackage Payment_Saferpay
  * @author Sascha Koehler <skoehler@pixeltricks.de>
  * @copyright 2012 pixeltricks GmbH
  * @since 01.10.2012
