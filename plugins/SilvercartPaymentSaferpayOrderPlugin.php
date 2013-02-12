@@ -31,7 +31,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @copyright 2012 pixeltricks GmbH
  */
-class SilvercartPaymentSaferpayOrderPlugin extends DataObjectDecorator {
+class SilvercartPaymentSaferpayOrderPlugin extends DataExtension {
 
     /**
      * Injects the saferpay information from the shopping cart into the order

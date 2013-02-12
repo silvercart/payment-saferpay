@@ -23,7 +23,6 @@
  */
 DataObject::add_extension('SilvercartPaymentSaferpay',              'SilvercartDataObjectMultilingualDecorator');
 DataObject::add_extension('SilvercartOrder',                        'SilvercartPaymentSaferpayOrder');
-DataObject::add_extension('SilvercartOrder_CollectionController',   'SilvercartPaymentSaferpayOrder_CollectionController');
 DataObject::add_extension('SilvercartShoppingCart',                 'SilvercartPaymentSaferpayShoppingCart');
 
 Object::add_extension('SilvercartOrderPluginProvider', 'SilvercartPaymentSaferpayOrderPlugin');

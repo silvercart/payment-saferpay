@@ -1,0 +1,37 @@
+en:
+  SilvercartOrderStatus:
+    SAFERPAY_CANCELED: "Saferpay canceled"
+    SAFERPAY_ERROR: "Saferpay error"
+    SAFERPAY_SUCCESS: "Paid via Saferpay"
+  SilvercartPaymentSaferpay:
+    API_ACCOUNTID: "Account ID"
+    API_DEVELOPMENT_MODE: "API development mode"
+    API_LIVE_MODE: "API live mode"
+    API_PASSWORD: "API Password (ONLY FOR BUSINESS ACCOUNTS. LEAVE EMPTY IF NOT NEEDED.)"
+    AUTOCLOSE: "number of seconds (0 to n) after which the payer is automatically forwarded"
+    CCCVC: "Query for card verification value (CVV/CVC2)"
+    CCNAME: "Ask the name of the card or account holder"
+    ENTER_DATA_AT_SAFERPAY: "Pay at Saferpay"
+    INFOTEXT_CHECKOUT: "payment via Saferpay"
+    ORDERSTATUS_CANCELED: "orderstatus for notification \"canceled\""
+    ORDERSTATUS_PAYED: "orderstatus for notification \"payed\""
+    ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE: "Proceed to payment via Saferpay"
+    PLURALNAME: "Saferpay"
+    SHOWLANGUAGES: "Display of the language selection in the menu of the Saferpay VT"
+    SINGULARNAME: "Saferpay"
+    URL_PAYCOMPLETE_GATEWAY: "Paycomplete gateway URL"
+    URL_PAYCONFIRM_GATEWAY: "Payconfirm gateway URL"
+    URL_PAYINIT_GATEWAY: "Payinit gateway URL"
+  SilvercartPaymentSaferpayError:
+    ERROR_1: "Required attributes are missing in request"
+    ERROR_2: "Not all data has been sent by Saferpay"
+    ERROR_3: "A wrong accountId has been sent by Saferpay"
+    ERROR_4: "A wrong token has been sent by Saferpay"
+    ERROR_5: "Saferpay verification failed"
+    ERROR_6: "Canceled by Saferpay"
+  SilvercartPaymentSaferpayLanguage:
+    PLURALNAME: "Translations of the payment method Saferpay"
+    SINGULARNAME: "Translation of the payment method Saferpay"
+  SilvercartPaymentSaferpayOrder:
+    SAFERPAY_IDENTIFIER: "Saferpay identifier"
+    SAFERPAY_TOKEN: "Saferpay token"

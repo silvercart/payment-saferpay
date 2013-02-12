@@ -1,0 +1,37 @@
+de:
+  SilvercartOrderStatus:
+    SAFERPAY_CANCELED: "Saferpay abgebrochen"
+    SAFERPAY_ERROR: "Saferpay Fehler"
+    SAFERPAY_SUCCESS: "Bezahlt via Saferpay"
+  SilvercartPaymentSaferpay:
+    API_ACCOUNTID: "Account ID"
+    API_DEVELOPMENT_MODE: "API Entwicklungsmodus"
+    API_LIVE_MODE: "API Live Modus"
+    API_PASSWORD: "API Password (Wird nur für Saferpay Business Accounts benötigt. Wenn nicht benötigt, leer lassen.)"
+    AUTOCLOSE: "Anzahl Sekunden (0 bis n) bis zur automatischen Weiterleitung nach erfolgreicher Zahlung"
+    CCCVC: "Prüfsumme der Kreditkarte abfragen"
+    CCNAME: "Name des Kreditkartenbesitzers abfragen"
+    ENTER_DATA_AT_SAFERPAY: "Bezahlung bei Saferpay durchführen"
+    INFOTEXT_CHECKOUT: "Die Zahlung erfolgt per Saferpay"
+    ORDERSTATUS_CANCELED: "Bestellstatus für Meldung \"abgebrochen\""
+    ORDERSTATUS_PAYED: "Bestellstatus für Meldung \"bezahlt\""
+    ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE: "Kaufen & weiter zur Bezahlung bei Saferpay"
+    PLURALNAME: "Saferpay"
+    SHOWLANGUAGES: "Anzeige der Sprachauswahl im Saferpay VT Menü"
+    SINGULARNAME: "Saferpay"
+    URL_PAYCOMPLETE_GATEWAY: "PaycompleteGateway URL"
+    URL_PAYCONFIRM_GATEWAY: "Payconfirm Gateway URL"
+    URL_PAYINIT_GATEWAY: "Payinit Gateway URL"
+  SilvercartPaymentSaferpayError:
+    ERROR_1: "Benötigte Attribute fehlen in Request"
+    ERROR_2: "Es wurden nicht alle Daten von Saferpay gesendet"
+    ERROR_3: "Es wurde eine falsche AccountID von Saferpay gesendet"
+    ERROR_4: "Es wurde ein falsches Token von Saferpay gesendet"
+    ERROR_5: "Verifikation bei Saferpay ist fehlgeschlagen"
+    ERROR_6: "Abbruch durch Saferpay"
+  SilvercartPaymentSaferpayLanguage:
+    PLURALNAME: "Übersetzungen der Zahlart Saferpay"
+    SINGULARNAME: "Übersetzung der Zahlart Saferpay"
+  SilvercartPaymentSaferpayOrder:
+    SAFERPAY_IDENTIFIER: "Saferpay Erkennungsnr."
+    SAFERPAY_TOKEN: "Saferpay Zeichen"

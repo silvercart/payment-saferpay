@@ -31,23 +31,20 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @copyright 2012 pixeltricks GmbH
  */
-class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
+class SilvercartPaymentSaferpayOrder extends DataExtension {
+    
     /**
-     * Additional datafields and relations.
+     * Attributes.
      *
-     * @return array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
+     * @var array
+     * 
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>
+     * @since 12.02.2013
      */
-    public function extraStatics() {
-        return array(
-            'db' => array(
-                'saferpayToken'      => 'VarChar(150)',
-                'saferpayIdentifier' => 'VarChar(150)'
-            )
-        );
-    }
+    public static $db = array(
+        'saferpayToken'      => 'VarChar(150)',
+        'saferpayIdentifier' => 'VarChar(150)'
+    );
 
     /**
      * Returns the saferpay ID.
@@ -133,33 +130,5 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
             'title'     => $this->owner->fieldLabel('saferpayToken'),
             'filter'    => 'PartialMatchFilter'
         );
-    }
-}
-
-/**
- * Extends SilvercartOrder_CollectionController
- *
- * @package Silvercart
- * @subpackage Payment_Saferpay
- * @author Sascha Koehler <skoehler@pixeltricks.de>
- * @since 2013-02-12
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @copyright 2013 pixeltricks GmbH
- */
-class SilvercartPaymentSaferpayOrder_CollectionController extends DataObjectDecorator {
-
-    /**
-     * Add search field for the saferpay token.
-     *
-     * @param Form &$searchForm The search form object
-     *
-     * @return void
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 2013-02-12
-     */
-    public function updateSearchForm(&$searchForm) {
-        $fields = $searchForm->Fields();
-        $fields->insertAfter($fields->dataFieldByName('saferpayToken'), 'OrderNumber');
     }
 }

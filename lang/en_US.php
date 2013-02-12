@@ -26,14 +26,6 @@
 
 global $lang;
 
-
-
-
-
-
-
-
-
 $lang['en_US']['SilvercartOrderStatus']['SAFERPAY_CANCELED']    = 'Saferpay canceled';
 $lang['en_US']['SilvercartOrderStatus']['SAFERPAY_ERROR']       = 'Saferpay error';
 $lang['en_US']['SilvercartOrderStatus']['SAFERPAY_SUCCESS']     = 'Paid via Saferpay';

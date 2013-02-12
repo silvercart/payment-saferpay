@@ -46,10 +46,7 @@ class SilvercartPaymentSaferpayCheckoutFormStep4 extends SilvercartCheckoutFormS
         if (parent::process()) {
             $paymentSuccessful  = false;
             $checkoutData       = $this->controller->getCombinedStepData();
-            $orderObj           = DataObject::get_by_id(
-                'SilvercartOrder',
-                $checkoutData['orderId']
-            );
+            $orderObj = SilvercartOrder::get()->byID($checkoutData['orderId']);
 
             if ($this->paymentMethodObj &&
                 $orderObj) {

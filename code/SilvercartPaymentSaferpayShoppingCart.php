@@ -31,24 +31,20 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @copyright 2012 pixeltricks GmbH
  */
-class SilvercartPaymentSaferpayShoppingCart extends DataObjectDecorator {
-
+class SilvercartPaymentSaferpayShoppingCart extends DataExtension {
+    
     /**
-     * Additional datafields and relations.
+     * Attributes.
      *
-     * @return array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
+     * @var array
+     * 
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>
+     * @since 12.02.2013
      */
-    public function extraStatics() {
-        return array(
-            'db' => array(
-                'saferpayToken'      => 'VarChar(150)',
-                'saferpayIdentifier' => 'VarChar(150)'
-            )
-        );
-    }
+    public static $db = array(
+        'saferpayToken'      => 'VarChar(150)',
+        'saferpayIdentifier' => 'VarChar(150)'
+    );
 
     /**
      * Returns the saferpay ID.
