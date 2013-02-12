@@ -57,6 +57,9 @@ $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']           
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'Paycomplete gateway URL';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit gateway URL';
 
+$lang['en_US']['SilvercartPaymentSaferpayOrder']['SAFERPAY_IDENTIFIER'] = 'Saferpay identifier';
+$lang['en_US']['SilvercartPaymentSaferpayOrder']['SAFERPAY_TOKEN']      = 'Saferpay token';
+
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_1'] = 'Required attributes are missing in request';
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_2'] = 'Not all data has been sent by Saferpay';
 $lang['en_US']['SilvercartPaymentSaferpayError']['ERROR_3'] = 'A wrong accountId has been sent by Saferpay';

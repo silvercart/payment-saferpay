@@ -102,4 +102,64 @@ class SilvercartPaymentSaferpayOrder extends DataObjectDecorator {
         $this->owner->setField('saferpayToken', (string) $saferpayToken);
         $this->owner->write();
     }
+
+    /**
+     * Update field labels
+     *
+     * @param array &$fieldLabels The field labels
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 2013-02-12
+     */
+    public function updateFieldLabels(&$fieldLabels) {
+        $fieldLabels['saferpayIdentifier']  = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_IDENTIFIER');
+        $fieldLabels['saferpayToken']       = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_TOKEN');
+    }
+
+    /**
+     * Add saferpayToken to searchable fields
+     *
+     * @param array &$searchableFields The searchable fields
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 2013-02-12
+     */
+    public function updateSearchableFields(&$searchableFields) {
+        $searchableFields['saferpayToken'] = array(
+            'title'     => $this->owner->fieldLabel('saferpayToken'),
+            'filter'    => 'PartialMatchFilter'
+        );
+    }
+}
+
+/**
+ * Extends SilvercartOrder_CollectionController
+ *
+ * @package Silvercart
+ * @subpackage Payment_Saferpay
+ * @author Sascha Koehler <skoehler@pixeltricks.de>
+ * @since 2013-02-12
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @copyright 2013 pixeltricks GmbH
+ */
+class SilvercartPaymentSaferpayOrder_CollectionController extends DataObjectDecorator {
+
+    /**
+     * Add search field for the saferpay token.
+     *
+     * @param Form &$searchForm The search form object
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 2013-02-12
+     */
+    public function updateSearchForm(&$searchForm) {
+        $fields = $searchForm->Fields();
+        $fields->insertAfter($fields->dataFieldByName('saferpayToken'), 'OrderNumber');
+    }
 }
