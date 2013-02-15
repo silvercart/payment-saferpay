@@ -215,8 +215,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         $tabApi     = new Tab('SaferpayAPI');
         $tabUrls    = new Tab('SaferpayURLs');
 
-        $fields->fieldByName('Sections')->push($tabApi);
-        $fields->fieldByName('Sections')->push($tabUrls);
+        $fields->fieldByName('Root')->push($tabApi);
+        $fields->fieldByName('Root')->push($tabUrls);
 
         // API Tabset ---------------------------------------------------------
         $tabApiTabset   = new TabSet('APIOptions');
@@ -255,19 +255,19 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             new TextField('saferpayPaycompleteGateway', _t('SilvercartPaymentSaferpay.URL_PAYCOMPLETE_GATEWAY'))
         );
         $fields->addFieldToTab(
-            'Sections.Basic',
+            'Root.Basic',
             new TextField('autoclose', _t('SilvercartPaymentSaferpay.AUTOCLOSE'))
         );
         $fields->addFieldToTab(
-            'Sections.Basic',
+            'Root.Basic',
             new CheckboxField('showLanguages', _t('SilvercartPaymentSaferpay.SHOWLANGUAGES'))
         );
         $fields->addFieldToTab(
-            'Sections.Basic',
+            'Root.Basic',
             new CheckboxField('cccvc', _t('SilvercartPaymentSaferpay.CCCVC'))
         );
         $fields->addFieldToTab(
-            'Sections.Basic',
+            'Root.Basic',
             new CheckboxField('ccname', _t('SilvercartPaymentSaferpay.CCNAME'))
         );
 
