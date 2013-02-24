@@ -670,7 +670,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             'saferpay_canceled' => _t('SilvercartOrderStatus.SAFERPAY_CANCELED')
         );
         $paymentLogos = array(
-            'Saferpay'  => SilvercartTools::getBaseURLSegment().'/silvercart_payment_saferpay/images/saferpay.png',
+            'Saferpay'  => '/silvercart_payment_saferpay/images/saferpay.png',
         );
 
         parent::createRequiredOrderStatus($requiredStatus);
