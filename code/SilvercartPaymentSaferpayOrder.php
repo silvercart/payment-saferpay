@@ -131,4 +131,24 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
             'filter'    => 'PartialMatchFilter'
         );
     }
+    
+    /**
+     * exclude these fields from scaffolding
+     * 
+     * @param array $fields already excluded fields
+     *
+     * @return void 
+     * 
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>
+     * @since 05.03.2013
+     */
+    public function updateExcludeFromScaffolding(&$fields) {
+        $fields = array_merge(
+                    $fields,
+                    array(
+                       'saferpayToken',
+                       'saferpayIdentifier'
+                    )
+                );
+    }
 }
