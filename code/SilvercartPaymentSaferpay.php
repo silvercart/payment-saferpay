@@ -297,10 +297,10 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     protected function getFieldsForSettings($fields) {
         $fieldlist = array(
-            new TextField('autoclose',     $this->fieldLabel('autoclose')),
-            new TextField('showLanguages', $this->fieldLabel('showLanguages')),
-            new TextField('cccvc',         $this->fieldLabel('cccvc')),
-            new TextField('ccname',        $this->fieldLabel('ccname')),
+            new TextField('autoclose',         $this->fieldLabel('autoclose')),
+            new CheckboxField('showLanguages', $this->fieldLabel('showLanguages')),
+            new CheckboxField('cccvc',         $this->fieldLabel('cccvc')),
+            new CheckboxField('ccname',        $this->fieldLabel('ccname')),
         );
         
         $settingsDataToggle = ToggleCompositeField::create(
