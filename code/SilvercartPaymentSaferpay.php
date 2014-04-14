@@ -122,26 +122,45 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     public static $defaults = array(
         'saferpayPayinitGateway'    => 'https://www.saferpay.com/hosting/CreatePayInit.asp'
     );
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 14.04.2014
+     */
+    public function singular_name() {
+        SilvercartTools::singular_name_for($this);
+    }
+
+
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 14.04.2014
+     */
+    public function plural_name() {
+        SilvercartTools::plural_name_for($this);
+    }
 
     /**
      * Creates a unique saferpay token.
      *
      * @return string
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 14.04.2014
      */
     public function createSaferpayToken() {
-        $member       = Member::currentUser();
-        $shoppingCart = $this->getShoppingCart();
-        $token        = crypt(
-            $member->FirstName.'-'.
-            $member->Surame.'-'.
-            $member->email.'-'.
-            $shoppingCart->getAmountTotal()->getAmount().'-'.
-            count($shoppingCart->SilvercartShoppingCartPositions()).'-'.
-            time()
-        );
+        $member = Member::currentUser();
+        $token  = $member->ID . '-' . time();
 
         return $token;
     }
@@ -204,6 +223,96 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     }
 
     /**
+     * i18n for field labels
+     *
+     * @param boolean $includerelations a boolean value to indicate if the labels returned include relation fields
+     *
+     * @return array
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 14.04.2014
+     */
+    public function fieldLabels($includerelations = true) {
+        $labels = array_merge(
+                parent::fieldLabels($includerelations),
+                array(
+                    'SaferpayApiData'                     => _t('SilvercartPaymentSaferpay.SaferpayApiData'),
+                    'SaferpaySettings'                    => _t('SilvercartPaymentSaferpay.SaferpaySettings'),
+                    'saferpayAccountId_Dev'               => _t('SilvercartPaymentSaferpay.API_ACCOUNTID'),
+                    'saferpayAccountId_Live'              => _t('SilvercartPaymentSaferpay.API_ACCOUNTID'),
+                    'saferpayAccountPassword_Live'        => _t('SilvercartPaymentSaferpay.API_PASSWORD'),
+                    'saferpayPayinitGateway'              => _t('SilvercartPaymentSaferpay.URL_PAYINIT_GATEWAY'),
+                    'saferpayPayconfirmGateway'           => _t('SilvercartPaymentSaferpay.URL_PAYCONFIRM_GATEWAY'),
+                    'saferpayPaycompleteGateway'          => _t('SilvercartPaymentSaferpay.URL_PAYCOMPLETE_GATEWAY'),
+                    'autoclose'                           => _t('SilvercartPaymentSaferpay.AUTOCLOSE'),
+                    'showLanguages'                       => _t('SilvercartPaymentSaferpay.SHOWLANGUAGES'),
+                    'cccvc'                               => _t('SilvercartPaymentSaferpay.CCCVC'),
+                    'ccname'                              => _t('SilvercartPaymentSaferpay.CCNAME'),
+                    'SilvercartPaymentSaferpayLanguages'  => _t('SilvercartPaymentSaferpayLanguage.PLURALNAME'),
+                )
+        );
+        
+        return $labels;
+    }
+    
+    /**
+     * Adds the fields for the Saferpay API
+     *
+     * @param FieldList $fields FieldList to add fields to
+     * @param bool      $forDev Add fields for dev or live mode?
+     * 
+     * @return void
+     */
+    protected function getFieldsForAPI($fields, $forDev = false) {
+        if ($forDev) {
+            $mode = 'Dev';
+            $fieldlist = array(
+                new TextField('saferpayAccountId_Dev', $this->fieldLabel('saferpayAccountId_Dev')),
+            );
+        } else {
+            $mode = 'Live';
+            $fieldlist = array(
+                new TextField('saferpayAccountId_Live',       $this->fieldLabel('saferpayAccountId_Live')),
+                new TextField('saferpayAccountPassword_Live', $this->fieldLabel('saferpayAccountPassword_Live')),
+                new TextField('saferpayPayinitGateway',       $this->fieldLabel('saferpayPayinitGateway')),
+                new TextField('saferpayPayconfirmGateway',    $this->fieldLabel('saferpayPayconfirmGateway')),
+                new TextField('saferpayPaycompleteGateway',   $this->fieldLabel('saferpayPaycompleteGateway')),
+            );
+        }
+        
+        $apiDataToggle = ToggleCompositeField::create(
+                'SaferpayAPI' . $mode,
+                $this->fieldLabel('SaferpayApiData') . ' "' . $this->fieldLabel('mode' . $mode) . '"',
+                $fieldlist
+        )->setHeadingLevel(4)->setStartClosed(true);
+        
+        $fields->addFieldToTab('Root.Basic', $apiDataToggle);
+    }
+    
+    /**
+     * Adds the fields for the Saferpay settings
+     *
+     * @param FieldList $fields FieldList to add fields to
+     * 
+     * @return void
+     */
+    protected function getFieldsForSettings($fields) {
+        $fieldlist = array(
+            new TextField('autoclose',     $this->fieldLabel('autoclose')),
+            new TextField('showLanguages', $this->fieldLabel('showLanguages')),
+            new TextField('cccvc',         $this->fieldLabel('cccvc')),
+            new TextField('ccname',        $this->fieldLabel('ccname')),
+        );
+        
+        $settingsDataToggle = ToggleCompositeField::create(
+                'Settings',
+                $this->fieldLabel('SaferpaySettings'),
+                $fieldlist
+        )->setHeadingLevel(4)->setStartClosed(true);
+        
+        $fields->addFieldToTab('Root.Basic', $settingsDataToggle);
+    }
+
+    /**
      * returns CMS fields
      *
      * @param mixed $params optional
@@ -211,65 +320,19 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @return FieldSet
      */
     public function getCMSFields($params = null) {
-        $fields     = parent::getCMSFieldsForModules($params);
-        $tabApi     = new Tab('SaferpayAPI');
-        $tabUrls    = new Tab('SaferpayURLs');
+        $fields = parent::getCMSFieldsForModules($params);
 
-        $fields->fieldByName('Root')->push($tabApi);
-        $fields->fieldByName('Root')->push($tabUrls);
-
-        // API Tabset ---------------------------------------------------------
-        $tabApiTabset   = new TabSet('APIOptions');
-        $tabApiTabDev   = new Tab(_t('SilvercartPaymentSaferpay.API_DEVELOPMENT_MODE', 'API development mode'));
-        $tabApiTabLive  = new Tab(_t('SilvercartPaymentSaferpay.API_LIVE_MODE', 'API live mode'));
-
-        // API Tabs -----------------------------------------------------------
-        $tabApiTabset->push($tabApiTabDev);
-        $tabApiTabset->push($tabApiTabLive);
-
-        $tabApi->push($tabApiTabset);
-
-        // API Tab Dev fields -------------------------------------------------
-        $tabApiTabDev->setChildren(
-            new FieldList(
-                new TextField('saferpayAccountId_Dev', _t('SilvercartPaymentSaferpay.API_ACCOUNTID'))
-            )
+        $this->getFieldsForAPI($fields, true);
+        $this->getFieldsForAPI($fields);
+        $this->getFieldsForSettings($fields);
+        
+        $translations = new GridField(
+                'SilvercartPaymentSaferpayLanguages',
+                $this->fieldLabel('SilvercartPaymentSaferpayLanguages'),
+                $this->SilvercartPaymentSaferpayLanguages(),
+                SilvercartGridFieldConfig_ExclusiveRelationEditor::create()
         );
-
-        // API Tab Live fields ------------------------------------------------
-        $tabApiTabLive->setChildren(
-            new FieldList(
-                new TextField('saferpayAccountId_Live',         _t('SilvercartPaymentSaferpay.API_ACCOUNTID')),
-                new TextField('saferpayAccountPassword_Live',   _t('SilvercartPaymentSaferpay.API_PASSWORD'))
-            )
-        );
-
-        // URL fields ------------------------------------------------
-        $tabUrls->push(
-            new TextField('saferpayPayinitGateway', _t('SilvercartPaymentSaferpay.URL_PAYINIT_GATEWAY'))
-        );
-        $tabUrls->push(
-            new TextField('saferpayPayconfirmGateway', _t('SilvercartPaymentSaferpay.URL_PAYCONFIRM_GATEWAY'))
-        );
-        $tabUrls->push(
-            new TextField('saferpayPaycompleteGateway', _t('SilvercartPaymentSaferpay.URL_PAYCOMPLETE_GATEWAY'))
-        );
-        $fields->addFieldToTab(
-            'Root.Basic',
-            new TextField('autoclose', _t('SilvercartPaymentSaferpay.AUTOCLOSE'))
-        );
-        $fields->addFieldToTab(
-            'Root.Basic',
-            new CheckboxField('showLanguages', _t('SilvercartPaymentSaferpay.SHOWLANGUAGES'))
-        );
-        $fields->addFieldToTab(
-            'Root.Basic',
-            new CheckboxField('cccvc', _t('SilvercartPaymentSaferpay.CCCVC'))
-        );
-        $fields->addFieldToTab(
-            'Root.Basic',
-            new CheckboxField('ccname', _t('SilvercartPaymentSaferpay.CCNAME'))
-        );
+        $fields->addFieldToTab('Root.Translations', $translations);
 
         return $fields;
     }
@@ -507,22 +570,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     public function getOrderConfirmationSubmitButtonTitle() {
         return _t('SilvercartPaymentSaferpay.ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE');
-    }
-
-    /**
-     * getter for the multilingual attribute paypalInfotextCheckout
-     *
-     * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
-     */
-    public function getSaferpayInfotextCheckout() {
-        $text = '';
-        if ($this->getLanguage()) {
-            $text = $this->getLanguage()->saferpayInfotextCheckout;
-        }
-        return $text;
     }
 
     /**

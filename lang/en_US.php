@@ -48,6 +48,8 @@ $lang['en_US']['SilvercartPaymentSaferpay']['SHOWLANGUAGES']                    
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCONFIRM_GATEWAY']                 = 'Payconfirm gateway URL';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']                = 'Paycomplete gateway URL';
 $lang['en_US']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit gateway URL';
+$lang['en_US']['SilvercartPaymentSaferpay']['SaferpayApiData']                        = 'Saferpay login data';
+$lang['en_US']['SilvercartPaymentSaferpay']['SaferpaySettings']                       = 'Saferpay settings';
 
 $lang['en_US']['SilvercartPaymentSaferpayOrder']['SAFERPAY_IDENTIFIER'] = 'Saferpay identifier';
 $lang['en_US']['SilvercartPaymentSaferpayOrder']['SAFERPAY_TOKEN']      = 'Saferpay token';
