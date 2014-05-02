@@ -247,7 +247,11 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
                     'showLanguages'                       => _t('SilvercartPaymentSaferpay.SHOWLANGUAGES'),
                     'cccvc'                               => _t('SilvercartPaymentSaferpay.CCCVC'),
                     'ccname'                              => _t('SilvercartPaymentSaferpay.CCNAME'),
+                    'sfPaidOrderStatus'                   => _t('SilvercartPaymentSaferpay.sfPaidOrderStatus'),
+                    'sfCanceledOrderStatus'               => _t('SilvercartPaymentSaferpay.sfCanceledOrderStatus'),
+                    'sfSuccessOrderStatus'                => _t('SilvercartPaymentSaferpay.sfSuccessOrderStatus'),
                     'SilvercartPaymentSaferpayLanguages'  => _t('SilvercartPaymentSaferpayLanguage.PLURALNAME'),
+                    'TabOrderStatus'                      => _t('SilvercartPaymentSaferpay.TabOrderStatus'),
                 )
         );
         
@@ -311,6 +315,33 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         
         $fields->addFieldToTab('Root.Basic', $settingsDataToggle);
     }
+    
+    /**
+     * Adds the fields for the PayPal order status
+     *
+     * @param FieldList $fields FieldList to add fields to
+     * 
+     * @return void
+     */
+    protected function getFieldsForOrderStatus($fields) {
+        $orderStatus = DataObject::get('SilvercartOrderStatus');
+        $fieldlist = array(
+                $fields->dataFieldByName('orderStatus'),
+                new DropdownField('sfPaidOrderStatus',     $this->fieldLabel('sfPaidOrderStatus'),     $orderStatus->map('ID', 'Title'), $this->sfPaidOrderStatus),
+                new DropdownField('sfCanceledOrderStatus', $this->fieldLabel('sfCanceledOrderStatus'), $orderStatus->map('ID', 'Title'), $this->sfCanceledOrderStatus),
+                new DropdownField('sfSuccessOrderStatus',  $this->fieldLabel('sfSuccessOrderStatus'),  $orderStatus->map('ID', 'Title'), $this->sfSuccessOrderStatus),
+        );
+        
+        $orderStatusDataToggle = ToggleCompositeField::create(
+                'OrderStatus',
+                $this->fieldLabel('TabOrderStatus'),
+                $fieldlist
+        )->setHeadingLevel(4)->setStartClosed(true);
+        
+        $fields->removeByName('orderStatus');
+        
+        $fields->addFieldToTab('Root.Basic', $orderStatusDataToggle);
+    }
 
     /**
      * returns CMS fields
@@ -322,6 +353,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     public function getCMSFields($params = null) {
         $fields = parent::getCMSFieldsForModules($params);
 
+        $this->getFieldsForOrderStatus($fields);
         $this->getFieldsForAPI($fields, true);
         $this->getFieldsForAPI($fields);
         $this->getFieldsForSettings($fields);

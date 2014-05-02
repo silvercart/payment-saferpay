@@ -50,6 +50,10 @@ $lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYCOMPLETE_GATEWAY']          
 $lang['de_DE']['SilvercartPaymentSaferpay']['URL_PAYINIT_GATEWAY']                    = 'Payinit Gateway URL';
 $lang['de_DE']['SilvercartPaymentSaferpay']['SaferpayApiData']                        = 'Saferpay Zugangsdaten';
 $lang['de_DE']['SilvercartPaymentSaferpay']['SaferpaySettings']                       = 'Saferpay Einstellungen';
+$lang['de_DE']['SilvercartPaymentSaferpay']['sfCanceledOrderStatus']                  = 'Bestellstatus für Meldung "abgebrochen"';
+$lang['de_DE']['SilvercartPaymentSaferpay']['sfPaidOrderStatus']                      = 'Bestellstatus für Meldung "bezahlt"';
+$lang['de_DE']['SilvercartPaymentSaferpay']['sfSuccessOrderStatus']                   = 'Bestellstatus für Meldung "erfolgreich"';
+$lang['de_DE']['SilvercartPaymentSaferpay']['TabOrderStatus']                         = 'Zuordnung Bestellstatus';
 
 $lang['de_DE']['SilvercartPaymentSaferpayOrder']['SAFERPAY_IDENTIFIER'] = 'Saferpay Erkennungsnr.';
 $lang['de_DE']['SilvercartPaymentSaferpayOrder']['SAFERPAY_TOKEN']      = 'Saferpay Zeichen';

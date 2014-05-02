@@ -18,8 +18,12 @@ de:
     PLURALNAME: "Saferpay"
     SaferpayApiData: "Saferpay Zugangsdaten"
     SaferpaySettings: "Saferpay Einstellungen"
+    sfCanceledOrderStatus: 'Bestellstatus für Meldung "abgebrochen"'
+    sfPaidOrderStatus: 'Bestellstatus für Meldung "bezahlt"'
+    sfSuccessOrderStatus: 'Bestellstatus für Meldung "erfolgreich"'
     SHOWLANGUAGES: "Anzeige der Sprachauswahl im Saferpay VT Menü"
     SINGULARNAME: "Saferpay"
+    TabOrderStatus: "Zuordnung Bestellstatus"
     URL_PAYCOMPLETE_GATEWAY: "PaycompleteGateway URL"
     URL_PAYCONFIRM_GATEWAY: "Payconfirm Gateway URL"
     URL_PAYINIT_GATEWAY: "Payinit Gateway URL"
