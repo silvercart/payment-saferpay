@@ -348,7 +348,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      *
      * @param mixed $params optional
      *
-     * @return FieldSet
+     * @return FieldList
      */
     public function getCMSFields($params = null) {
         $fields = parent::getCMSFieldsForModules($params);
