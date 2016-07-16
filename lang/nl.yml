@@ -1,0 +1,42 @@
+nl:
+  SilvercartOrderStatus:
+    SAFERPAY_CANCELED: "Saferpay geannuleerd"
+    SAFERPAY_ERROR: "Saferpay fout"
+    SAFERPAY_SUCCESS: "Betaald via Saferpay"
+  SilvercartPaymentSaferpay:
+    API_ACCOUNTID: "Account ID"
+    API_DEVELOPMENT_MODE: "API ontwikkeling mode"
+    API_LIVE_MODE: "API live mode"
+    API_PASSWORD: "API Password (ALLEEN VOOR zakelijke rekeningen. Leeglaten als nodig niet.)"
+    AUTOCLOSE: "aantal seconden (0 tot n) waarna de speler automatisch doorgestuurd"
+    CCCVC: "Query voor kaart verificatie waarde (CVV / CVC2)"
+    CCNAME: "Vraag de naam van de kaart of rekeninghouder"
+    ENTER_DATA_AT_SAFERPAY: "Betaal in Saferpay"
+    ORDERSTATUS_CANCELED: "order status voor de melding \"geannuleerd \""
+    ORDERSTATUS_PAYED: "Orderstatus voor kennisgeving \" betaald \""
+    ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE: "Overgaan tot betaling via Saferpay"
+    PLURALNAME: "Saferpay"
+    SaferpayApiData: "Saferpay login data"
+    SaferpaySettings: "Saferpay instellingen"
+    sfCanceledOrderStatus: 'Order status voor kennisgeving "geannuleerd"'
+    sfPaidOrderStatus: 'Order status voor kennisgeving "betaald"'
+    sfSuccessOrderStatus: 'Status van bestelling voor de melding "succes"'
+    SHOWLANGUAGES: "Weergave van de taal selectie in het menu van de Saferpay VT"
+    SINGULARNAME: "Saferpay"
+    TabOrderStatus: 'Toegeschreven orderstatus'
+    URL_PAYCOMPLETE_GATEWAY: "Paycomplete gateway URL"
+    URL_PAYCONFIRM_GATEWAY: "Payconfirm gateway URL"
+    URL_PAYINIT_GATEWAY: "Payinit gateway URL"
+  SilvercartPaymentSaferpayError:
+    ERROR_1: "Vereiste attributen ontbreken in het verzoek"
+    ERROR_2: "Niet alle gegevens zijn verzonden door Saferpay"
+    ERROR_3: "Een verkeerde account Id is verzonden door Saferpay"
+    ERROR_4: "Een verkeerde token is verzonden door Saferpay"
+    ERROR_5: "Saferpay verificatie mislukt"
+    ERROR_6: "Geannuleerd door Saferpay"
+  SilvercartPaymentSaferpayLanguage:
+    PLURALNAME: "Vertalingen van de betaalmethode Saferpay"
+    SINGULARNAME: "Vertaling van de betaalmethode Saferpay"
+  SilvercartPaymentSaferpayOrder:
+    SAFERPAY_IDENTIFIER: "Saferpay identifier"
+    SAFERPAY_TOKEN: "Saferpay token"
