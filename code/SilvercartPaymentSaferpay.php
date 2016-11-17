@@ -197,18 +197,54 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
                 $password = null;
             }
         } else {
-            $password = 'XAjc3Kna';
+            $password = '8e7Yn5yk';
         }
         return $password;
+    }
+    
+    /**
+     * Returns the Saferpay pay init gateway URL.
+     * 
+     * @return string
+     */
+    public function getSaferpayPayinitGatewayURL() {
+        $saferpayPayinitGateway = $this->saferpayPayinitGateway;
+        if ($this->mode == 'Dev') {
+            $saferpayPayinitGateway = str_replace('www.saferpay.com', 'test.saferpay.com', $saferpayPayinitGateway);
+        }
+        return $saferpayPayinitGateway;
+    }
+    
+    /**
+     * Returns the Saferpay pay confirm gateway URL.
+     * 
+     * @return string
+     */
+    public function getSaferpayPayconfirmGatewayURL() {
+        $saferpayPayconfirmGateway = $this->saferpayPayconfirmGateway;
+        if ($this->mode == 'Dev') {
+            $saferpayPayconfirmGateway = str_replace('www.saferpay.com', 'test.saferpay.com', $saferpayPayconfirmGateway);
+        }
+        return $saferpayPayconfirmGateway;
+    }
+    
+    /**
+     * Returns the Saferpay pay complete gateway URL.
+     * 
+     * @return string
+     */
+    public function getSaferpayPaycompleteGatewayURL() {
+        $saferpayPaycompleteGateway = $this->saferpayPaycompleteGateway;
+        if ($this->mode == 'Dev') {
+            $saferpayPaycompleteGateway = str_replace('www.saferpay.com', 'test.saferpay.com', $saferpayPaycompleteGateway);
+        }
+        return $saferpayPaycompleteGateway;
     }
 
     /**
      * Returns the description of the order.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getDescription() {
         if ($this->description == null) {
@@ -228,6 +264,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @param boolean $includerelations a boolean value to indicate if the labels returned include relation fields
      *
      * @return array
+     * 
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 14.04.2014
      */
@@ -572,9 +609,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @param string $eci The ECI identifier
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getEciMsg($eci) {
         switch($eci) {
@@ -596,9 +630,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Set the title for the submit button on the order confirmation step.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getOrderConfirmationSubmitButtonTitle() {
         return _t('SilvercartPaymentSaferpay.ORDER_CONFIRMATION_SUBMIT_BUTTON_TITLE');
@@ -611,16 +642,13 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @param string $token The token for the request
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@standardized.de>, Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 28.01.2013
      */
     protected function getCompleteUrl($id, $token) {
         $attributes  = "?ACCOUNTID=" . $this->getAccountId();
         $attributes .= "&ID=" . urlencode($id);
         $attributes .= "&TOKEN=" . urlencode($token);
 
-        $paycomplete_url = $this->saferpayPaycompleteGateway.$attributes;
+        $paycomplete_url = $this->getSaferpayPaycompleteGatewayURL() . $attributes;
 
         // **************************************************
         // * Special for testaccount: password for hosting-capture neccessary.
@@ -642,15 +670,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @param string $signature The signature string from saferpay
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@standardized.de>
-     * @since 01.10.2012
      */
     protected function getConfirmationUrl($data, $signature) {
         $attributes  = "?DATA=".urlencode($data);
         $attributes .= "&SIGNATURE=".urlencode($signature);
 
-        $payconfirm_url = $this->saferpayPayconfirmGateway.$attributes;
+        $payconfirm_url = $this->getSaferpayPayconfirmGatewayURL() . $attributes;
 
         return $payconfirm_url;
     }
@@ -659,9 +684,6 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * Returns the payment URL
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@standardized.de>
-     * @since 01.10.2012
      */
     protected function getPaymentUrl() {
         $checkoutData = $this->controller->getCombinedStepData();
@@ -700,7 +722,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         // Shop specific attributes
         $attributes .= "&ORDERID=".urlencode($saferpayToken);
 
-        $payinit_url = $this->saferpayPayinitGateway.$attributes;
+        $payinit_url = $this->getSaferpayPayinitGatewayURL() . $attributes;
 
         // Create CURL session
         $cs = curl_init($payinit_url);
@@ -719,10 +741,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         curl_close($cs);
         
         // Stop if CURL is not working
-        if (strtolower(substr($paymentUrl, 0, 24)) != "https://www.saferpay.com") {
-            $msg = "<p>PHP-CURL is not working correctly for outgoing SSL-calls on your server:<br/>";
-            $msg .= htmlentities($paymentUrl)."<br/>";
-            $msg .= htmlentities($ce)."</p>";
+        if (($this->mode == 'Live' &&
+             strtolower(substr($paymentUrl, 0, 24)) != "https://www.saferpay.com") ||
+            ($this->mode == 'Dev' &&
+             strtolower(substr($paymentUrl, 0, 25)) != "https://test.saferpay.com")) {
+            $this->Log('getPaymentUrl', var_export($paymentUrl, true));
+            $msg = "<p>An error occured while trying to connect to Saferpay. Please try again.</p>";
             $this->addError($msg);
 
             return false;
@@ -736,7 +760,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@standardized.de>
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 01.10.2012
      */
     public function requireDefaultRecords() {
