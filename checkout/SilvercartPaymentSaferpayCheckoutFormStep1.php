@@ -58,7 +58,7 @@ class SilvercartPaymentSaferpayCheckoutFormStep1 extends SilvercartCheckoutFormS
      */
     public function process() {
         if (parent::process()) {
-            $this->paymentMethodObj->setCancelLink(Director::absoluteURL($this->controller->Link()) . 'Cancel');
+            $this->paymentMethodObj->setCancelLink(Director::absoluteURL($this->controller->Link()) . 'GotoStep/4');
             $this->paymentMethodObj->setReturnLink(Director::absoluteURL($this->controller->Link()));
 
             if (!$this->paymentMethodObj->processPaymentBeforeOrder()) {
