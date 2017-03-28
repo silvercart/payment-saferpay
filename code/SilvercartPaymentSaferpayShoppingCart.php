@@ -34,25 +34,20 @@
 class SilvercartPaymentSaferpayShoppingCart extends DataExtension {
     
     /**
-     * Attributes.
+     * DB attributes.
      *
      * @var array
-     * 
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 12.02.2013
      */
     public static $db = array(
-        'saferpayToken'      => 'VarChar(150)',
-        'saferpayIdentifier' => 'VarChar(150)'
+        'saferpayToken'         => 'VarChar(150)',
+        'saferpayIdentifier'    => 'VarChar(150)',
+        'saferpayTransactionId' => 'VarChar(150)',
     );
 
     /**
      * Returns the saferpay ID.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getSaferpayID() {
         return $this->owner->getField('saferpayIdentifier');
@@ -62,12 +57,18 @@ class SilvercartPaymentSaferpayShoppingCart extends DataExtension {
      * Returns the saferpay token.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getSaferpayToken() {
         return $this->owner->getField('saferpayToken');
+    }
+
+    /**
+     * Returns the saferpay TransactionId.
+     *
+     * @return string
+     */
+    public function getSaferpayTransactionId() {
+        return $this->owner->getField('saferpayTransactionId');
     }
 
     /**
@@ -97,6 +98,21 @@ class SilvercartPaymentSaferpayShoppingCart extends DataExtension {
      */
     public function saveSaferpayToken($saferpayToken) {
         $this->owner->setField('saferpayToken', (string) $saferpayToken);
+        $this->owner->write();
+    }
+
+    /**
+     * Writes the given TransactionId into the shoppingcart.
+     *
+     * @param string $saferpayTransactionId The TransactionId to save
+     *
+     * @return void
+     *
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 28.03.2017
+     */
+    public function saveSaferpayTransactionId($saferpayTransactionId) {
+        $this->owner->setField('saferpayTransactionId', (string) $saferpayTransactionId);
         $this->owner->write();
     }
 }

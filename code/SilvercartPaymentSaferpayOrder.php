@@ -34,25 +34,20 @@
 class SilvercartPaymentSaferpayOrder extends DataExtension {
     
     /**
-     * Attributes.
+     * DB attributes.
      *
      * @var array
-     * 
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 12.02.2013
      */
-    public static $db = array(
-        'saferpayToken'      => 'VarChar(150)',
-        'saferpayIdentifier' => 'VarChar(150)'
+    private static $db = array(
+        'saferpayToken'         => 'VarChar(150)',
+        'saferpayIdentifier'    => 'VarChar(150)',
+        'saferpayTransactionId' => 'VarChar(150)',
     );
 
     /**
      * Returns the saferpay ID.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getSaferpayID() {
         return $this->owner->getField('saferpayIdentifier');
@@ -62,16 +57,22 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
      * Returns the saferpay token.
      *
      * @return string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 01.10.2012
      */
     public function getSaferpayToken() {
         return $this->owner->getField('saferpayToken');
     }
 
     /**
-     * Writes the given ID into the shoppingcart.
+     * Returns the saferpay transaction ID.
+     *
+     * @return string
+     */
+    public function getSaferpayTransactionId() {
+        return $this->owner->getField('saferpayTransactionId');
+    }
+
+    /**
+     * Writes the given ID to the order.
      *
      * @param string $saferpayID The ID to save
      *
@@ -86,7 +87,7 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
     }
 
     /**
-     * Writes the given token into the shoppingcart.
+     * Writes the given token to the order.
      *
      * @param string $saferpayToken The token to save
      *
@@ -101,6 +102,21 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
     }
 
     /**
+     * Writes the given transaction ID to the order.
+     *
+     * @param string $saferpayTransactionId The transaction ID to save
+     *
+     * @return void
+     *
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 28.03.2017
+     */
+    public function saveSaferpayTransactionId($saferpayTransactionId) {
+        $this->owner->setField('saferpayTransactionId', (string) $saferpayTransactionId);
+        $this->owner->write();
+    }
+
+    /**
      * Update field labels
      *
      * @param array &$fieldLabels The field labels
@@ -111,8 +127,9 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
      * @since 2013-02-12
      */
     public function updateFieldLabels(&$fieldLabels) {
-        $fieldLabels['saferpayIdentifier']  = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_IDENTIFIER');
-        $fieldLabels['saferpayToken']       = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_TOKEN');
+        $fieldLabels['saferpayIdentifier']    = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_IDENTIFIER');
+        $fieldLabels['saferpayToken']         = _t('SilvercartPaymentSaferpayOrder.SAFERPAY_TOKEN');
+        $fieldLAbels['saferpayTransactionId'] = _t('SilvercartPaymentSaferpayOrder.saferpayTransactionId');
     }
 
     /**
@@ -146,8 +163,9 @@ class SilvercartPaymentSaferpayOrder extends DataExtension {
         $fields = array_merge(
                     $fields,
                     array(
-                       'saferpayToken',
-                       'saferpayIdentifier'
+                        'saferpayToken',
+                        'saferpayIdentifier',
+                        'saferpayTransactionId',
                     )
                 );
     }

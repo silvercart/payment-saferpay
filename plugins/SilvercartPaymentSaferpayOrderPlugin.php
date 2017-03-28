@@ -49,8 +49,9 @@ class SilvercartPaymentSaferpayOrderPlugin extends DataExtension {
         $order                  = $arguments[0];
         $silvercartShoppingCart = $arguments[1];
 
-        $order->saferpayIdentifier  = $silvercartShoppingCart->getSaferpayId();
-        $order->saferpayToken       = $silvercartShoppingCart->getSaferpayToken();
+        $order->saferpayIdentifier    = $silvercartShoppingCart->getSaferpayId();
+        $order->saferpayToken         = $silvercartShoppingCart->getSaferpayToken();
+        $order->saferpayTransactionId = $silvercartShoppingCart->getSaferpayTransactionId();
         $order->write();
     }
 }

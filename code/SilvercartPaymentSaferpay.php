@@ -119,13 +119,14 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     const SAFERPAY_BASE_URL_TEST     = 'https://test.saferpay.com/api';
     const PAYMENTPAGE_INITIALIZE_URL = '/Payment/v1/PaymentPage/Initialize';
     const PAYMENTPAGE_ASSERT_URL     = '/Payment/v1/PaymentPage/Assert';
-    
+    const TRANSACTION_CAPTURE_URL    = '/Payment/v1/Transaction/Capture';
+
     /**
      * Returns the translated singular name of the object. If no translation exists
      * the class name will be returned.
-     * 
+     *
      * @return string
-     * 
+     *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 14.04.2014
      */
@@ -446,12 +447,21 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     }
     
     /**
-     * Returns the Saferpay API PaymentPage Initialize URL.
+     * Returns the Saferpay API PaymentPage Assert URL.
      * 
      * @return string
      */
     public function getSaferpayApiPaymentPageAssertUrl() {
         return $this->getSaferpayApiBaseUrl() . self::PAYMENTPAGE_ASSERT_URL;
+    }
+
+    /**
+     * Returns the Saferpay API Transaction Capture URL.
+     *
+     * @return string
+     */
+    public function getSaferpayApiTransactionCaptureUrl() {
+        return $this->getSaferpayApiBaseUrl() . self::TRANSACTION_CAPTURE_URL;
     }
 
     // ------------------------------------------------------------------------
@@ -469,6 +479,8 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     protected function paymentPageInitialize() {
         $checkoutData  = $this->controller->getCombinedStepData();
         $shoppingCart  = $this->getShoppingCart();
+        $shoppingCart->setShippingMethodID($checkoutData['ShippingMethod']);
+        $shoppingCart->setPaymentMethodID($checkoutData['PaymentMethod']);
         $totalAmount   = $shoppingCart->getAmountTotal();
         $saferpayToken = $this->createSaferpayToken();
         $shoppingCart->saveSaferpayToken($saferpayToken);
@@ -524,7 +536,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         curl_setopt($cs, CURLOPT_USERPWD, $this->getApiUsername() . ":" . $this->getPassword());
         $jsonResponse = curl_exec($cs);
         $httpStatus   = curl_getinfo($cs, CURLINFO_HTTP_CODE);
-        $errorOccured = $this->isSaferpayApiError($httpStatus, $this->getSaferpayApiPaymentPageAssertUrl(), $jsonRequest, $jsonResponse, $cs);
+        $errorOccured = $this->isSaferpayApiError($httpStatus, $this->getSaferpayApiPaymentPageInitializeUrl(), $jsonRequest, $jsonResponse, $cs);
         curl_close($cs);
         
         if ($errorOccured) {
@@ -536,7 +548,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
     }
     
     /**
-     * Saferpay PaymentPage Initialize API call.
+     * Saferpay PaymentPage Assert API call.
      * 
      * @return void
      *
@@ -584,6 +596,58 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
         $response = json_decode($jsonResponse, true);
         return $response;
     }
+
+    /**
+     * Saferpay Transaction Capture API call.
+     *
+     * @return void
+     *
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 27.03.2017
+     */
+    public function transactionCapture() {
+        $jsonArray = array(
+            'RequestHeader' => array(
+                'SpecVersion'    => '1.3',
+                'CustomerId'     => $this->getAccountId(),
+                'RequestId'      => $this->order->saferpayToken,
+                'RetryIndicator' => 0,
+            ),
+            'TransactionReference' => array(
+                'TransactionId' => $this->order->saferpayTransactionId,
+            ),
+            'Amount' => array(
+                'Value'        => $this->order->AmountTotal->getAmount() * 100,
+                'CurrencyCode' => $this->order->AmountTotal->getCurrency(),
+            ),
+        );
+        $jsonRequest = json_encode($jsonArray);
+
+        $cs = curl_init($this->getSaferpayApiTransactionCaptureUrl());
+        curl_setopt($cs, CURLOPT_PORT, 443);
+        curl_setopt($cs, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($cs, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($cs, CURLOPT_HEADER, 0);
+        curl_setopt($cs, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($cs, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Accept: application/json',
+        ));
+        curl_setopt($cs, CURLOPT_POST, true);
+        curl_setopt($cs, CURLOPT_POSTFIELDS, $jsonRequest);
+        curl_setopt($cs, CURLOPT_USERPWD, $this->getApiUsername() . ":" . $this->getPassword());
+        $jsonResponse = curl_exec($cs);
+        $httpStatus   = curl_getinfo($cs, CURLINFO_HTTP_CODE);
+        $errorOccured = $this->isSaferpayApiError($httpStatus, $this->getSaferpayApiTransactionCaptureUrl(), $jsonRequest, $jsonResponse, $cs);
+        curl_close($cs);
+
+        if ($errorOccured) {
+            return false;
+        }
+
+        $response = json_decode($jsonResponse, true);
+        return $response;
+    }
     
     /**
      * Checks if a Saferpay API error occured.
@@ -602,12 +666,12 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     protected function isSaferpayApiError($httpStatus, $targetUrl, $jsonRequest, $jsonResponse, $curlConnection) {
         if ($httpStatus != 200) {
-            $this->Log('paymentPageAssert', 'Error: call to URL ' . $targetUrl . ' failed with status ' . $httpStatus . '.');
-            $this->Log('paymentPageAssert', ' - JSON request: ' . $jsonRequest);
-            $this->Log('paymentPageAssert', ' - JSON response: ' . $jsonResponse);
-            $this->Log('paymentPageAssert', ' - CURL error: ' . curl_error($curlConnection));
-            $this->Log('paymentPageAssert', ' - CURL errno: ' . curl_errno($curlConnection));
-            $this->Log('paymentPageAssert', ' - HTTP-Status: ' . $httpStatus);
+            $this->Log('saferpay error', 'Error: call to URL ' . $targetUrl . ' failed with status ' . $httpStatus . '.');
+            $this->Log('saferpay error', ' - JSON request: ' . $jsonRequest);
+            $this->Log('saferpay error', ' - JSON response: ' . $jsonResponse);
+            $this->Log('saferpay error', ' - CURL error: ' . curl_error($curlConnection));
+            $this->Log('saferpay error', ' - CURL errno: ' . curl_errno($curlConnection));
+            $this->Log('saferpay error', ' - HTTP-Status: ' . $httpStatus);
             $msg = "<p>An error occured while trying to connect to Saferpay. Please try again.</p>";
             $this->addError($msg);
             return true;
@@ -657,7 +721,10 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      */
     public function processReturnJumpFromPaymentProvider() {
         $paymentResult     = $this->paymentPageAssert();
+        $shoppingCart      = $this->getShoppingCart();
         $transactionStatus = $paymentResult['Transaction']['Status'];
+        $transactionId     = $paymentResult['Transaction']['Id'];
+        $shoppingCart->saveSaferpayTransactionId($transactionId);
 
         if (in_array($transactionStatus, $this->successStatus)) {
             $this->Log('processReturnJumpFromPaymentProvider', 'PAYMENT SUCCESSFUL');
@@ -683,8 +750,13 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
      * @since 01.12.2016
      */
     public function processPaymentAfterOrder($orderObj = array()) {
+        $captureResult = $this->transactionCapture();
         $this->order->setOrderStatusByID($this->sfSuccessOrderStatus);
         $this->order->sendConfirmationMail();
+
+        $this->Log('processPaymentAfterOrder', 'TRANSACTION CAPTURE');
+        $this->Log('processPaymentAfterOrder', ' - ' . var_export($captureResult, true));
+
         parent::processPaymentAfterOrder($this->order);
     }
 

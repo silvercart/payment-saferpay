@@ -23,6 +23,7 @@ de:
     PLURALNAME: "Saferpay"
     SaferpayApiData: "Saferpay Zugangsdaten"
     SaferpaySettings: "Saferpay Einstellungen"
+    saferpayTransactionId: "Saferpay Transaktions ID"
     sfCanceledOrderStatus: 'Bestellstatus für Meldung "abgebrochen"'
     sfPaidOrderStatus: 'Bestellstatus für Meldung "bezahlt"'
     sfSuccessOrderStatus: 'Bestellstatus für Meldung "erfolgreich"'

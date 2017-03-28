@@ -23,6 +23,7 @@ nl:
     PLURALNAME: "Saferpay"
     SaferpayApiData: "Saferpay login data"
     SaferpaySettings: "Saferpay instellingen"
+    saferpayTransactionId: "Saferpay Transaction ID"
     sfCanceledOrderStatus: 'Order status voor kennisgeving "geannuleerd"'
     sfPaidOrderStatus: 'Order status voor kennisgeving "betaald"'
     sfSuccessOrderStatus: 'Status van bestelling voor de melding "succes"'
