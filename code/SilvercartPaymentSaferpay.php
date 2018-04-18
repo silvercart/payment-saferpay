@@ -502,7 +502,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
             'TerminalId' => $this->getTerminalId(),
             'Payment' => array(
                 'Amount' => array(
-                    'Value'        => $totalAmount->getAmount() * 100,
+                    'Value'        => round($totalAmount->getAmount() * 100),
                     'CurrencyCode' => $totalAmount->getCurrency(),
                 ),
                 'OrderId'     => $saferpayToken,
@@ -617,7 +617,7 @@ class SilvercartPaymentSaferpay extends SilvercartPaymentMethod {
                 'TransactionId' => $this->order->saferpayTransactionId,
             ),
             'Amount' => array(
-                'Value'        => $this->order->AmountTotal->getAmount() * 100,
+                'Value'        => round($this->order->AmountTotal->getAmount() * 100),
                 'CurrencyCode' => $this->order->AmountTotal->getCurrency(),
             ),
         );
