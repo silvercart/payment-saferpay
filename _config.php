@@ -21,6 +21,10 @@
  * @subpackage Payment_Saferpay
  * @ignore
  */
+if (!class_exists('SS_Object')) {
+    class_alias('Object', 'SS_Object');
+}
+
 SS_Object::add_extension('SilvercartPaymentSaferpay',              'SilvercartDataObjectMultilingualDecorator');
 SS_Object::add_extension('SilvercartOrder',                        'SilvercartPaymentSaferpayOrder');
 SS_Object::add_extension('SilvercartShoppingCart',                 'SilvercartPaymentSaferpayShoppingCart');
