@@ -21,8 +21,8 @@
  * @subpackage Payment_Saferpay
  * @ignore
  */
-DataObject::add_extension('SilvercartPaymentSaferpay',              'SilvercartDataObjectMultilingualDecorator');
-DataObject::add_extension('SilvercartOrder',                        'SilvercartPaymentSaferpayOrder');
-DataObject::add_extension('SilvercartShoppingCart',                 'SilvercartPaymentSaferpayShoppingCart');
+SS_Object::add_extension('SilvercartPaymentSaferpay',              'SilvercartDataObjectMultilingualDecorator');
+SS_Object::add_extension('SilvercartOrder',                        'SilvercartPaymentSaferpayOrder');
+SS_Object::add_extension('SilvercartShoppingCart',                 'SilvercartPaymentSaferpayShoppingCart');
 
-Object::add_extension('SilvercartOrderPluginProvider', 'SilvercartPaymentSaferpayOrderPlugin');
+SS_Object::add_extension('SilvercartOrderPluginProvider', 'SilvercartPaymentSaferpayOrderPlugin');
